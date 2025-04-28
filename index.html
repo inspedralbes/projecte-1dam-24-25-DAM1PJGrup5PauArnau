@@ -6,24 +6,21 @@
     <title>Gestor d'incidències</title>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>Gestor d'incidències</h1>
-        <p>Benvingut al gestor d'incidències. Aquí podràs gestionar les incidències de manera eficient.</p>
-        <h2>Selecciona el teu rol</h2>
-        <div class="btn-group" role="group">
-            <!-- Botó per a l'Administrador -->
-            <a href="pagina_admin.html" class="btn btn-primary">Administrador</a>
+    <h1>Gestor d'incidències</h1>
+    <p>Benvingut al gestor d'incidències. Aquí podràs gestionar les incidències de manera eficient.</p>
+    <h2>Selecciona el teu rol</h2>
+    <form action="gestor.php" method="post">
+        <div class="role-options">
+            <input type="radio" name="role" id="admin" value="admin">
+            <label class="role-option" for="admin">Administrador</label>
 
-            <!-- Botó per a l'Usuari -->
-            <a href="pagina_usuari.html" class="btn btn-secondary">Usuari</a>
+            <input type="radio" name="role" id="user" value="user">
+            <label class="role-option" for="user">Usuari</label>
 
-            <!-- Botó per al Tècnic -->
-            <a href="pagina_tecnic.html" class="btn btn-success">Tècnic</a>
+            <input type="radio" name="role" id="tecnic" value="tecnic">
+            <label class="role-option" for="tecnic">Tècnic</label>
         </div>
-    </div>
-
-    <!-- Incloure Bootstrap JS per a la funcionalitat del formulari (si cal) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+        <input type="submit" value="Entrar">
+    </form>
 </body>
 </html>
