@@ -17,7 +17,7 @@ Action.belongsTo(Incident, { foreignKey: 'incidentId' });
 
 // Rutes EJS
 const incidentRoutesEJS = require('./routes/incidentsEJS.routes');
-const departmentRoutesEJS = require('./routes/departmentsEJS.routes');
+const departmentRoutesEJS = require('./routes/departamentsEJS.routes');
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -46,7 +46,11 @@ app.get('/', async (req, res) => {
   }
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;  // Aquí està configurat per escoltar al port 3000
+app.listen(port, () => {
+  console.log(`Servidor escoltant a http://localhost:${port}`);
+});
+
 
 (async () => {
   try {
