@@ -1,5 +1,79 @@
-<!-- src/views/index.ejs -->
 <%- include('partials/header', { title: 'Projecte Motos' }) %>
-  <h1>Benvingut al projecte Motos!</h1>
-  <p>Aquesta és la pàgina d’inici, renderitzada amb EJS.</p>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1 class="display-4">Catàleg de Motocicletes</h1>
+    <p class="lead">Explora la nostra col·lecció de motocicletes. Clica en qualsevol targeta per veure més detalls.</p>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Filters -->
+  <div id="filters" class="row mb-4">
+    <div class="col-md-6">
+      <div class="input-group">
+        <input type="text" id="searchInput" class="form-control" placeholder="Cerca per nom, marca...">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <select id="categoryFilter" class="form-select">
+        <option value="all">Totes les categories</option>
+        <% 
+        // Create an array to store unique categories
+        const categories = [];
+        motorcycles.forEach(moto => {
+          if (moto.Category && !categories.some(cat => cat.id === moto.Category.id)) {
+            categories.push(moto.Category);
+          }
+        });
+        
+        // Display options for each unique category
+        categories.forEach(category => { 
+        %>
+          <option value="<%= category.id %>"><%= category.name %></option>
+        <% }); %>
+      </select>
+    </div>
+  </div>
+
+  <!-- Motorcycle Cards -->
+  <div class="row">
+    <% motorcycles.forEach(moto => { %>
+      <div class="col-md-4 mb-4 moto-card-container" data-category="<%= moto.categoryId %>">
+        <div class="card moto-card h-100" data-moto-id="<%= moto.id %>">
+          <% if (moto.Category) { %>
+            <span class="badge bg-danger category-badge"><%= moto.Category.name %></span>
+          <% } %>
+          
+          <% if (moto.img) { %>
+            <img src="/images/<%= moto.img %>" class="card-img-top moto-image" alt="<%= moto.name %>">
+          <% } else { %>
+            <img src="/images/placeholder.svg" class="card-img-top moto-image" alt="Motorcycle Placeholder">
+          <% } %>
+          
+          <div class="card-body">
+            <h5 class="card-title">
+              <img src="/images/<%= moto.country %>.png" class="country-flag" alt="<%= moto.country %>">
+              <%= moto.name %>
+            </h5>
+            <p class="card-text">
+              <strong>Marca:</strong> <%= moto.brand %><br>
+              <strong>Cilindrada:</strong> <%= moto.cc %> cc
+            </p>
+          </div>
+          <div class="card-footer">
+            <a href="/motorcycles/<%= moto.id %>/edit" class="btn btn-sm btn-outline-primary">Editar</a>
+            <button class="btn btn-sm btn-outline-danger float-end">Detalls</button>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+
+<!-- Add JavaScript for interactivity -->
+<script src="/static/js/main.js"></script>
+
 <%- include('partials/footer') %>
