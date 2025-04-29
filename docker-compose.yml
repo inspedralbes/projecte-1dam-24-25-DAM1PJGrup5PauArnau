@@ -1,7 +1,7 @@
 services:
   motos-app:
     build: .
-    container_name: motos-project-1DAM
+    container_name: incidencias-project-1DAM
     env_file:
       - .env
     volumes:
@@ -13,7 +13,7 @@ services:
 
   db:
     image: mysql:5.7
-    container_name: motos-db-container
+    container_name: incidencias-db-container
     env_file:
       - .env
     environment:
@@ -24,7 +24,7 @@ services:
 
   adminer:
     image: adminer
-    container_name: motos-adminer
+    container_name: incidencias-adminer
     depends_on:
     - db
     ports:

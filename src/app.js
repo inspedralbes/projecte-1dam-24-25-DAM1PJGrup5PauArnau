@@ -2,15 +2,13 @@
 const express = require('express');
 require('dotenv').config();
 const sequelize = require('./db');
+
 const Motorcycle = require('./models/Motorcycle');
 const Category = require('./models/Category');
 
 // Relacions
 Category.hasMany(Motorcycle, { foreignKey: 'categoryId', onDelete: 'CASCADE' });
 Motorcycle.belongsTo(Category, { foreignKey: 'categoryId' });
-
-const motorcycleRoutes = require('./routes/motorcycles.routes');
-const categoryRoutes = require('./routes/categories.routes');
 
 // Rutes EJS
 const motorcycleRoutesEJS = require('./routes/motorcyclesEJS.routes');
@@ -26,10 +24,6 @@ app.set('view engine', 'ejs');
 const path = require('path');
 app.set('views', path.join(__dirname, 'views'));
 //Fi de la sessió 8
-
-// Rutes JSON
-app.use('/api/motorcycles', motorcycleRoutes);
-app.use('/api/categories', categoryRoutes);
 
 // Rutes EJS
 app.use('/motorcycles', motorcycleRoutesEJS);

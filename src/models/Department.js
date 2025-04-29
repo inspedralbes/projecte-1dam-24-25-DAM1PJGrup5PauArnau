@@ -1,8 +1,8 @@
-// src/models/Category.js
+// src/models/Department.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
-const Category = sequelize.define('Category', {
+const Department = sequelize.define('Department', {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -10,4 +10,4 @@ const Category = sequelize.define('Category', {
   },
 });
 
-module.exports = Category;
+module.exports = Department;
