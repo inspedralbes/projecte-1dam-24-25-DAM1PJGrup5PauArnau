@@ -1,0 +1,19 @@
+<%- include('../partials/header', { title: 'Llista d\'Incidències' }) %>
+
+<h1>Llista d'Incidències</h1>
+<a class="btn btn-primary mb-3" href="/incidents/new">Afegir Incidència</a>
+<ul class="list-group">
+  <% incidents.forEach(incident => { %>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span>
+        <strong><%= incident.description %></strong> 
+      </span>
+      <span>
+        <a href="/incidents/<%= incident.id %>/edit" class="btn btn-warning">Editar</a>
+        <a href="/incidents/<%= incident.id %>/delete" class="btn btn-danger">Eliminar</a>
+      </span>
+    </li>
+  <% }) %>
+</ul>
+
+<%- include('../partials/footer') %>

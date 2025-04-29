@@ -1,0 +1,19 @@
+<%- include('../partials/header', { title: 'Editar Departament' }) %>
+
+<h1>Editar Departament</h1>
+<form action="/departments/<%= department.id %>/update" method="POST">
+  <div class="mb-3">
+    <label for="name" class="form-label">Nom del Departament</label>
+    <input
+      type="text"
+      name="name"
+      value="<%= department.name %>"
+      class="form-control"
+      required
+    />
+  </div>
+  
+  <button type="submit" class="btn btn-primary">Actualitzar Departament</button>
+</form>
+
+<%- include('../partials/footer') %>
