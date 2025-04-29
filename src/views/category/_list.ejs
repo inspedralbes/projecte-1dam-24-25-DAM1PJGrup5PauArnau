@@ -1,0 +1,17 @@
+<%- include('../partials/header', { title: 'Llista de categorias' }) %>
+  <h1>Llista de categories</h1>
+  <a class="btn btn-primary mb-3" href="/categories/new">Afegir categoria</a>
+  <ul class="list-group">
+    <% categories.forEach(cat => { %>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>
+          <strong><%= cat.name%></strong> 
+        </span>
+        <span>
+          <a href="/categories/<%= cat.id %>/edit" class="btn btn-warning">Editar</a>
+          <a href="/categories/<%= cat.id %>/delete" class="btn btn-danger">Eliminar</a>
+        </span>
+      </li>
+    <% }) %>
+  </ul>
+<%- include('../partials/footer') %>

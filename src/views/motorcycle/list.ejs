@@ -1,0 +1,48 @@
+<%- include('../partials/header', { title: 'Llista de motos' }) %>
+  <h1>Llista de motos</h1>
+  <a class="btn btn-primary mb-3" href="/motorcycles/new">Afegir moto</a>
+  <ul class="list-group">
+    <% motorcycles.forEach(moto => { %>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>
+          <strong><%= moto.name %></strong> - <img width="20px" src="/images/<%= moto.country %>.png" > -  <%= moto.brand %> (<%= moto.cc %> cc)
+          <% if (moto.Category) { %>
+            [<%= moto.Category.name %>]
+          <% } %>
+        </span>
+
+        <span>
+          <a href="/motorcycles/<%= moto.id %>/edit" class="btn btn-warning">Editar</a>
+          <a href="/motorcycles/<%= moto.id %>/delete" class="btn btn-danger">Eliminar</a>
+        </span>
+      </li>
+    <% }) %>
+  </ul>
+
+  <h1 id="titulo">Taula de motos</h1>
+
+  <table class="table table-striped table-dark table-hover">
+    <% motorcycles.forEach(moto => { %>
+      <tr class="">
+        <td> <strong><%= moto.name %></strong> </td>
+        <td><img width="20px" src="/images/<%= moto.country %>.png" > </td>
+        <td> <%= moto.brand %></td>
+        <td>(<%= moto.cc %> cc)</td>
+        <td>   
+          <% if (moto.Category) { %>
+            [<%= moto.Category.name %>]
+          <% } %>
+          </td>
+        <td>
+          <a href="/motorcycles/<%= moto.id %>/edit" class="btn btn-warning">Editar</a>
+          <a href="/motorcycles/<%= moto.id %>/delete" class="btn btn-danger">Eliminar</a>
+        </td>
+      </tr>
+    <% }) %>
+    </table>
+    <script>
+      document.getElementById("titulo").addEventListener("click",function(){
+        alert("has apretado el titulo")
+      })
+    </script>
+<%- include('../partials/footer') %>
