@@ -6,7 +6,10 @@
   <% incidents.forEach(incident => { %>
     <li class="list-group-item d-flex justify-content-between align-items-center">
       <span>
-        <strong><%= incident.description %></strong> 
+        <strong><%= incident.description %></strong><br>
+        <small><strong>Departament:</strong> <%= incident.Department ? incident.Department.name : 'Desconegut' %></small>
+        <br>
+        <small><strong>Prioritat:</strong> <%= incident.priority %></small>
       </span>
       <span>
         <a href="/incidents/<%= incident.id %>/edit" class="btn btn-warning">Editar</a>
