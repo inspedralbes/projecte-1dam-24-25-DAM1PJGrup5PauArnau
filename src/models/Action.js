@@ -12,10 +12,6 @@ const Action = sequelize.define('Action', {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
-  timeSpent: {
-    type: DataTypes.INTEGER, // En minuts
-    allowNull: false,
-  },
   visibleToUser: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
