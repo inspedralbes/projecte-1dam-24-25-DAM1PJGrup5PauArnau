@@ -1,18 +1,15 @@
-module.exports = (sequelize, DataTypes) => {
-    const TipusIncidencia = sequelize.define('TipusIncidencia', {
-      nom: {
-        type: DataTypes.STRING,
-        allowNull: false
-      }
-    }, {
-      tableName: 'tipus_incidencies',
-      timestamps: false
-    });
-  
-    TipusIncidencia.associate = models => {
-      TipusIncidencia.hasMany(models.Incidencia, { foreignKey: 'tipus_id' });
-    };
-  
-    return TipusIncidencia;
-  };
-  
+// src/models/tipus_incidencia.js
+const { DataTypes } = require('sequelize');
+const sequelize = require('../db');
+
+const tipus_incidencia = sequelize.define('tipus_incidencia', {
+  nom: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+}, {
+  tableName: 'tipus_incidencies',
+  timestamps: false
+});
+
+module.exports = tipus_incidencia;
