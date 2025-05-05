@@ -6,7 +6,7 @@ services:
       - .env
     volumes:
       - .:/app
-    ports:
+    ports:    cd /home/isard/projects/projecte-1dam-24-25-DAM1PJGrup5PauArnau
       - "3000:3000"
     depends_on:
       - db
