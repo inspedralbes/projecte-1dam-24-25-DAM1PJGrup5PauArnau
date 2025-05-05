@@ -78,7 +78,7 @@ app.get('/', async (req, res) => {
 });
 
 // Port
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 
 // Sync DB i iniciar servidor
 (async () => {
