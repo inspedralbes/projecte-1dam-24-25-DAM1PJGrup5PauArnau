@@ -3,7 +3,10 @@ const { Sequelize } = require('sequelize');
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
   host: process.env.DB_HOST,
   dialect: 'mysql',
-  port: 3306, // Asegúrate de que este puerto coincida con el puerto del contenedor MySQL
+  port: 3306,
+  dialectOptions: {
+    connectTimeout: 60000, // 60 segundos
+  },
 });
 
 sequelize.authenticate()
