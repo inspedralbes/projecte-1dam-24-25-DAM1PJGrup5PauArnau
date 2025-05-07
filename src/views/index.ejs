@@ -6,6 +6,7 @@
 </head>
 <body>
 
+<%- include('partials/header') %>
 <div class="jumbotron">
   <div class="container">
     <h1 class="display-4">Catàleg d'Incidències</h1>
@@ -36,6 +37,8 @@
 
   <!-- Incident Cards -->
   <div class="row">
+    <% if (incidents.length > 0) { %>
+      <% incidents.forEach(incident => { %>
       <div class="col-md-4 mb-4 incident-card-container" data-department="<%= incident.departmentId %>">
         <div class="card incident-card h-100" data-incident-id="<%= incident.id %>">
             <span class="badge bg-danger department-badge"></span>
@@ -54,10 +57,16 @@
           </div>
         </div>
       </div>
+      <% }) %>
+      <% } else { %>
+        <p>No hi ha incidències disponibles.</p>
+      <% } %>
   </div>
 </div>
 
 <!-- Afegir JavaScript per interactivitat -->
 <script src="/static/js/main.js"></script>
+
+<%- include('partials/footer') %>
 
 </body>

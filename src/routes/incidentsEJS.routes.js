@@ -1,79 +1,59 @@
-// src/routes/incidentsEJS.routes.js
 const express = require('express');
 const router = express.Router();
-const Incident = require('../models/Incident');  // Model d'Incidència
-const Department = require('../models/Department');  // Model de Departament
+const Incident = require('../models/Incident');
+const Department = require('../models/Department');
 
 // Llistar incidències
 router.get('/', async (req, res) => {
-    try {
-        const incidents = await Incident.findAll({ include: Department });
-        res.render('incidents/list', { incidents });
-    } catch (error) {
-        res.status(500).send('Error al recuperar incidències');
-    }
+  try {
+    const incidents = await Incident.findAll({ include: Department });
+    res.render('incidencies/list', { incidents });
+  } catch (error) {
+    res.status(500).send('Error al recuperar incidències');
+  }
 });
 
-// Form per crear una incidència (GET)
+// Formulari nova incidència
 router.get('/new', async (req, res) => {
-    try {
-        const departments = await Department.findAll();  // Carregar departaments
-        res.render('incidents/new', { departments });
-    } catch (error) {
-        res.status(500).send('Error al carregar el formulari');
-    }
+  const departments = await Department.findAll();
+  res.render('incidencies/new', { departments });
 });
 
-// Crear incidència (POST)
+// Crear incidència
 router.post('/create', async (req, res) => {
-    try {
-        const { description, priority, departmentId } = req.body;
-        await Incident.create({ description, priority, departmentId });
-        res.redirect('/incidents'); // Torna al llistat d'incidències
-    } catch (error) {
-        res.status(500).send('Error al crear la incidència');
-    }
+  try {
+    const { description, priority, departmentId } = req.body;
+    await Incident.create({ description, priority, departmentId });
+    res.redirect('/incidencies');
+  } catch (error) {
+    res.status(500).send('Error al crear incidència');
+  }
 });
 
-// Form per editar una incidència (GET)
+// Formulari d'edició
 router.get('/:id/edit', async (req, res) => {
-    try {
-        const incident = await Incident.findByPk(req.params.id);
-        if (!incident) return res.status(404).send('Incidència no trobada');
-
-        const departments = await Department.findAll();
-        res.render('incidents/edit', { incident, departments });
-    } catch (error) {
-        res.status(500).send('Error al carregar el formulari d’edició');
-    }
+  const incident = await Incident.findByPk(req.params.id);
+  const departments = await Department.findAll();
+  if (!incident) return res.status(404).send('Incidència no trobada');
+  res.render('incidencies/edit', { incident, departments });
 });
 
-// Actualitzar incidència (POST)
+// Actualitzar incidència
 router.post('/:id/update', async (req, res) => {
-    try {
-        const { description, priority, departmentId } = req.body;
-        const incident = await Incident.findByPk(req.params.id);
-        if (!incident) return res.status(404).send('Incidència no trobada');
-        incident.description = description;
-        incident.priority = priority;
-        incident.departmentId = departmentId;
-        await incident.save();
-        res.redirect('/incidents');
-    } catch (error) {
-        res.status(500).send('Error al actualitzar la incidència');
-    }
+  const { description, priority, departmentId } = req.body;
+  const incident = await Incident.findByPk(req.params.id);
+  if (!incident) return res.status(404).send('Incidència no trobada');
+  Object.assign(incident, { description, priority, departmentId });
+  await incident.save();
+  res.redirect('/incidencies');
 });
 
-// Eliminar incidència (GET)
+// Eliminar incidència
 router.get('/:id/delete', async (req, res) => {
-    try {
-        const incident = await Incident.findByPk(req.params.id);
-        if (!incident) return res.status(404).send('Incidència no trobada');
-        await incident.destroy();
-        res.redirect('/incidents');
-    } catch (error) {
-        res.status(500).send('Error al eliminar la incidència');
-    }
+  const incident = await Incident.findByPk(req.params.id);
+  if (!incident) return res.status(404).send('Incidència no trobada');
+  await incident.destroy();
+  res.redirect('/incidencies');
 });
 
 module.exports = router;

@@ -1,0 +1,32 @@
+<%- include('../partials/header', { title: 'Editar Incidència' }) %>
+
+<h1>Editar Incidència</h1>
+
+<form action="/incidencies/<%= incident.id %>/update" method="POST">
+  <div class="mb-3">
+    <label class="form-label">Descripció</label>
+    <input type="text" name="description" class="form-control" value="<%= incident.description %>" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Prioritat</label>
+    <select name="priority" class="form-select" required>
+      <option value="Baixa" <%= incident.priority === 'Baixa' ? 'selected' : '' %>>Baixa</option>
+      <option value="Mitjana" <%= incident.priority === 'Mitjana' ? 'selected' : '' %>>Mitjana</option>
+      <option value="Alta" <%= incident.priority === 'Alta' ? 'selected' : '' %>>Alta</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Departament</label>
+    <select name="departmentId" class="form-select" required>
+      <% departments.forEach(dep => { %>
+        <option value="<%= dep.id %>" <%= dep.id === incident.departmentId ? 'selected' : '' %>><%= dep.name %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Desar Canvis</button>
+</form>
+
+<%- include('../partials/footer') %>

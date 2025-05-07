@@ -1,0 +1,39 @@
+<%- include('../partials/header', { title: 'Editar Usuari' }) %>
+
+<h1>Editar Usuari</h1>
+
+<form action="/usuaris/<%= usuari.id %>/update" method="POST">
+  <div class="mb-3">
+    <label class="form-label">Nom</label>
+    <input type="text" name="nom" class="form-control" value="<%= usuari.nom %>" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Cognoms</label>
+    <input type="text" name="cognoms" class="form-control" value="<%= usuari.cognoms %>" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Email</label>
+    <input type="email" name="email" class="form-control" value="<%= usuari.email %>" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Contrasenya</label>
+    <input type="password" name="contrasenya" class="form-control" value="<%= usuari.contrasenya %>" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Rol</label>
+    <select name="rol" class="form-select" required>
+      <option value="usuari" <%= usuari.rol === 'usuari' ? 'selected' : '' %>>Usuari</option>
+      <option value="tecnic" <%= usuari.rol === 'tecnic' ? 'selected' : '' %>>Tècnic</option>
+      <option value="responsable" <%= usuari.rol === 'responsable' ? 'selected' : '' %>>Responsable</option>
+      <option value="admin" <%= usuari.rol === 'admin' ? 'selected' : '' %>>Administrador</option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Desar Canvis</button>
+</form>
+
+<%- include('../partials/footer') %>

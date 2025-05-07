@@ -1,0 +1,40 @@
+<%- include('../partials/header', { title: 'Afegir Usuari' }) %>
+
+<h1>Afegir Usuari</h1>
+
+<form action="/usuaris/create" method="POST">
+  <div class="mb-3">
+    <label class="form-label">Nom</label>
+    <input type="text" name="nom" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Cognoms</label>
+    <input type="text" name="cognoms" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Email</label>
+    <input type="email" name="email" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Contrasenya</label>
+    <input type="password" name="contrasenya" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Rol</label>
+    <select name="rol" class="form-select" required>
+      <option value="usuari">Usuari</option>
+      <option value="tecnic">Tècnic</option>
+      <option value="responsable">Responsable</option>
+      <option value="admin">Administrador</option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-success">Crear Usuari</button>
+</form>
+
+<%- include('../partials/footer') %>
+

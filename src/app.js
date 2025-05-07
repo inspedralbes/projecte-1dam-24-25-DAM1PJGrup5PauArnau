@@ -61,11 +61,13 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
 // Rutes
+const usuarisRoutes = require('./routes/usuarisEJS.routes');
 const incidentRoutesEJS = require('./routes/incidentsEJS.routes');
-const departmentRoutesEJS = require('./routes/departamentsEJS.routes');
+const adminRoutes = require('./routes/admin/index.routes');
 
-app.use('/incidents', incidentRoutesEJS);
-app.use('/departments', departmentRoutesEJS);
+app.use('/admin', adminRoutes);
+app.use('/usuaris', usuarisRoutes);
+app.use('/incidencies', incidentRoutesEJS);
 
 // Ruta principal
 app.get('/', async (req, res) => {
