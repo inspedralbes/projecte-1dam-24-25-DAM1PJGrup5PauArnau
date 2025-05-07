@@ -1,35 +1,25 @@
-  <h1>Nova moto</h1>
+  <h1>Nova Incidència</h1>
   <form action="/incidencies/Crear" method="POST">
     <div class="mb-3">
       <label for="descripció" class="form-label">A continuació descriu l'incident:</label>
       <input type="text" name="name" class="form-control" required />
     </div>
+    <p></p>
     <div class="mb-3">
       <label for="brand" class="form-label">A quin departament vols enviar aquesta incidència?</label>
       <select name="categoryId" class="form-select">
           <option value="inf1">Informàtica</option>
       </select>
     </div>
+    <p></p>
     <div class="mb-3">
-      <label for="country" class="form-label">Païs</label>
-    
-      <select name="country" id="cars" class="form-control" required>
-        <option value="italy">Italia</option>
-        <option value="usa">USA</option>
-        <option value="japan">Japó</option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label for="cc" class="form-label">Centímetres cúbics</label>
-      <input type="number" name="cc" class="form-control" required />
-    </div>
-    <div class="mb-3">
-      <label for="categoryId" class="form-label">Categoria</label>
+      <label for="categoryId" class="form-label">Nivell d'importància</label>
       <select name="categoryId" class="form-select">
-        <% categories.forEach(cat => { %>
-          <option value="<%= cat.id %>"><%= cat.name %></option>
-        <% }) %>
+          <option value="B">Baixa</option>
+          <option value="M">Mitja</option>
+          <option value="A">Alta</option>
       </select>
     </div>
-    <button type="submit" class="btn btn-success">Crear</button>
+    <p></p>
+    <button type="submit" class="btn btn-success">Enviar</button>
   </form>
