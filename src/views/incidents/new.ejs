@@ -1,12 +1,14 @@
   <h1>Nova moto</h1>
   <form action="/incidencies/Crear" method="POST">
     <div class="mb-3">
-      <label for="name" class="form-label">Nom</label>
+      <label for="descripció" class="form-label">A continuació descriu l'incident:</label>
       <input type="text" name="name" class="form-control" required />
     </div>
     <div class="mb-3">
-      <label for="brand" class="form-label">Marca</label>
-      <input type="text" name="brand" class="form-control" required />
+      <label for="brand" class="form-label">A quin departament vols enviar aquesta incidència?</label>
+      <select name="categoryId" class="form-select">
+          <option value="inf1">Informàtica</option>
+      </select>
     </div>
     <div class="mb-3">
       <label for="country" class="form-label">Païs</label>
