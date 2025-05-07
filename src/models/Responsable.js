@@ -17,7 +17,9 @@ const Responsable = sequelize.define('Responsable', {
     references: {
       model: 'departaments',
       key: 'id'
-    }
+    },
+    onDelete: 'NO ACTION',
+    onUpdate: 'CASCADE',
   }
 }, {
   tableName: 'responsables',

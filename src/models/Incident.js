@@ -22,7 +22,4 @@ const Incident = sequelize.define('Incident', {
   },
 });
 
-// Relació amb Departament (una incidència pot ser de diversos departaments)
-Incident.belongsTo(Department, { foreignKey: 'departmentId', onDelete: 'CASCADE' });
-
 module.exports = Incident;

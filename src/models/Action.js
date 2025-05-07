@@ -22,7 +22,5 @@ const Action = sequelize.define('Action', {
   },
 });
 
-// Relació amb Incidència (una actuació pertany a una incidència)
-Action.belongsTo(Incident, { foreignKey: 'incidentId', onDelete: 'CASCADE' });
 
 module.exports = Action;

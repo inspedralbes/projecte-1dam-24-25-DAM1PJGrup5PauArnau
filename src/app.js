@@ -13,10 +13,6 @@ const Responsable = require('./models/Responsable');
 const TipusIncidencia = require('./models/tipus_incidencia');
 
 // Relacions
-// Incidència i Departament
-Incident.belongsTo(Department, { foreignKey: 'departmentId', onDelete: 'CASCADE' });
-Department.hasMany(Incident, { foreignKey: 'departmentId', onDelete: 'CASCADE' });
-
 // Incidència i Accions
 Incident.hasMany(Action, { foreignKey: 'incidentId', onDelete: 'CASCADE' });
 Action.belongsTo(Incident, { foreignKey: 'incidentId' });
@@ -24,6 +20,19 @@ Action.belongsTo(Incident, { foreignKey: 'incidentId' });
 // Usuari i Incidència
 Usuari.hasMany(Incident, { foreignKey: 'usuari_id' });
 Incident.belongsTo(Usuari, { foreignKey: 'usuari_id' });
+
+
+// Tecnic i Incidència (assignació)
+Tecnic.hasMany(Incident, { foreignKey: 'tecnic_id' });
+Incident.belongsTo(Tecnic, { foreignKey: 'tecnic_id' });
+
+// Tecnic i Accions
+Tecnic.hasMany(Action, { foreignKey: 'tecnic_id' });
+Action.belongsTo(Tecnic, { foreignKey: 'tecnic_id' });
+
+// Tipus d'incidència i Incidència
+TipusIncidencia.hasMany(Incident, { foreignKey: 'tipus_id' });
+Incident.belongsTo(TipusIncidencia, { foreignKey: 'tipus_id' });
 
 // Usuari i Tecnic
 Usuari.hasOne(Tecnic, { foreignKey: 'id' });
@@ -37,17 +46,9 @@ Responsable.belongsTo(Usuari, { foreignKey: 'id' });
 Responsable.belongsTo(Department, { foreignKey: 'departament_id' });
 Department.hasOne(Responsable, { foreignKey: 'departament_id' });
 
-// Tecnic i Incidència (assignació)
-Tecnic.hasMany(Incident, { foreignKey: 'tecnic_id' });
-Incident.belongsTo(Tecnic, { foreignKey: 'tecnic_id' });
-
-// Tecnic i Accions
-Tecnic.hasMany(Action, { foreignKey: 'tecnic_id' });
-Action.belongsTo(Tecnic, { foreignKey: 'tecnic_id' });
-
-// Tipus d'incidència i Incidència
-TipusIncidencia.hasMany(Incident, { foreignKey: 'tipus_id' });
-Incident.belongsTo(TipusIncidencia, { foreignKey: 'tipus_id' });
+// Incidència i Departament
+Incident.belongsTo(Department, { foreignKey: 'departmentId', onDelete: 'CASCADE' });
+Department.hasMany(Incident, { foreignKey: 'departmentId', onDelete: 'CASCADE' });
 
 // Inicialització d’Express
 const app = express();
@@ -78,34 +79,13 @@ app.get('/', async (req, res) => {
 });
 
 // Port
-const port = process.env.PORT || 3000;
+const port = process.env.PORT ||3000;
 
 // Sync DB i iniciar servidor
 (async () => {
   try {
-    await sequelize.sync({ force: false }); // No esborra les taules si ja existeixen
-    console.log('📦 Base de dades sincronitzada');
-
-    // ✅ Exemple de dades només si vols afegir mostres:
-    /*
-    const deptIT = await Department.create({ name: 'Informàtica' });
-    const tipus = await TipusIncidencia.create({ nom: 'Hardware' });
-    const user = await User.create({ nom: 'Anna', cognoms: 'Martínez', email: 'anna@example.com', contrasenya: '1234', rol: 'usuari' });
-
-    const incident = await Incident.create({
-      description: 'Ordinador no encén',
-      priority: 'Alta',
-      departmentId: deptIT.id,
-      tipus_id: tipus.id,
-      usuari_id: user.id,
-    });
-
-    await Action.create({
-      description: 'Canviada la font d’alimentació',
-      timeSpent: 45,
-      incidentId: incident.id,
-    });
-    */
+    await sequelize.sync({ force: false }); // Força la recreació de totes les taules
+    console.log('📦 Taules creades correctament');
 
     app.listen(port, () => {
       console.log(`🚀 Servidor escoltant a http://localhost:${port}`);

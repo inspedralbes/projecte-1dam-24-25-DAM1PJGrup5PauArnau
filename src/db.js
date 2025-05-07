@@ -11,5 +11,8 @@ const sequelize = new Sequelize(
     dialect: 'mysql',
   }
 );
+sequelize.authenticate()
+  .then(() => console.log('✅ Connexió amb la base de dades establerta correctament.'))
+  .catch((error) => console.error('❌ Error connectant amb la base de dades:', error));
 
 module.exports = sequelize;
