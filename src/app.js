@@ -5,16 +5,16 @@ const sequelize = require('./db');
 
 // Models
 const Department = require('./models/Department');
-const Incident = require('./models/Incident');
-const Action = require('./models/Action');
+const Incident = require('./models/Incidencia');
+const Action = require('./models/Actuacio');
 const Usuari = require('./models/Usuari');
 const Tecnic = require('./models/Tecnic');
 
 // Relacions
 
 // Incidència i Accions
-Incident.hasMany(Action, { foreignKey: 'incidentId', onDelete: 'CASCADE' });
-Action.belongsTo(Incident, { foreignKey: 'incidentId' });
+Incident.hasMany(Action, { foreignKey: 'incidentid', onDelete: 'CASCADE' });
+Action.belongsTo(Incident, { foreignKey: 'incidentid' });
 
 // Usuari i Incidència
 Usuari.hasMany(Incident, { foreignKey: 'usuari_id', onDelete: 'CASCADE' });
@@ -58,7 +58,7 @@ app.use('/incidencies', incidentRoutesEJS);
 // Ruta principal
 app.get('/', async (req, res) => {
   try {
-    const incidents = await Incident.findAll({ include: [Department, Tecnic, Usuari] });
+    const incidents = await Incident.findAll({ include: [Department, Tecnic, Usuari, Actuacio] });
     res.render('index', { incidents });
   } catch (error) {
     console.error('Error carregant les incidències:', error.message);
@@ -76,11 +76,11 @@ const port = process.env.PORT ||3000;
     console.log('📦 Taules creades correctament');
 
     Department.create({
-      name: 'Matemàtiques',	
+      nom: 'Matemàtiques',	
       
     });
     Department.create({
-      name: 'Informàtica',	
+      nom: 'Informàtica',	
       
     });
 

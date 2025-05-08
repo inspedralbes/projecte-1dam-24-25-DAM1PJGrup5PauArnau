@@ -1,7 +1,6 @@
 // src/models/Incident.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
-const Department = require('./Department');  // Importem el model de Departament
 
 const Incident = sequelize.define('Incident', {
   decripcio: {

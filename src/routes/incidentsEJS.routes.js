@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Incident = require('../models/Incident');
+const Incident = require('../models/Incidencia');
 const Department = require('../models/Department');
 
 // Llistar incidències
