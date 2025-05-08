@@ -2,7 +2,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
-const Department = sequelize.define('Department', {
+const Departament = sequelize.define('Department', {
   nom: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -12,4 +12,4 @@ const Department = sequelize.define('Department', {
   tableName: 'departaments',
 });
 
-module.exports = Department;
+module.exports = Departament;
