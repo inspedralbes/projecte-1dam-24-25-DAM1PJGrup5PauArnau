@@ -1,3 +1,4 @@
+<%- include('../partials/header', { title: 'Afegir Incidencies' }) %>
   <h1>Nova Incidència</h1>
   <form action="/incidencies/Crear" method="POST">
     <div class="mb-3">
@@ -9,6 +10,10 @@
       <label for="brand" class="form-label">A quin departament vols enviar aquesta incidència?</label>
       <select name="categoryId" class="form-select">
           <option value="inf1">Informàtica</option>
+          <option value="art1">Arts</option>
+          <option value="edfi">Educació Física</option>
+          <option value="mats">Matemàtiques</option>
+          <option value=""></option>
       </select>
     </div>
     <p></p>
@@ -23,3 +28,4 @@
     <p></p>
     <button type="submit" class="btn btn-success">Enviar</button>
   </form>
+  <%- include('../partials/footer') %>
