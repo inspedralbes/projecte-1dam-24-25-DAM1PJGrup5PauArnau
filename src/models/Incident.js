@@ -4,21 +4,21 @@ const sequelize = require('../db');
 const Department = require('./Department');  // Importem el model de Departament
 
 const Incident = sequelize.define('Incident', {
-  description: {
+  decripcio: {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  creationDate: {
+  dataCreacio: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
-  isResolved: {
+  Resolta: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
-  priority: {
+  Prioritat: {
     type: DataTypes.ENUM('Alta', 'Mitja', 'Baixa'),
-    allowNull: false,
+    allowNull: true,
   },
 });
 

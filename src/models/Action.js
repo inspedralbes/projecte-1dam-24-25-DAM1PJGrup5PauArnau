@@ -4,19 +4,15 @@ const sequelize = require('../db');
 const Incident = require('./Incident');  // Importem el model d'Incidència
 
 const Action = sequelize.define('Action', {
-  description: {
+  descripcio: {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  date: {
+  data: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
-  visibleToUser: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true,
-  },
-  isResolved: {
+  Resolta: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
