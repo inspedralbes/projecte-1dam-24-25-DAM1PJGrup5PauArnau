@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const Incident = require('../models/Incidencia');
-const Department = require('../models/Department');
+const Departament = require('../models/Departament');
 
 // Llistar incidències
 router.get('/', async (req, res) => {
   try {
-    const incidents = await Incident.findAll({ include: Department });
+    const incidents = await Incident.findAll({ include: Departament });
     res.render('incidencies/list', { incidents });
   } catch (error) {
     res.status(500).send('Error al recuperar incidències'+error.message);
@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 
 // Formulari nova incidència
 router.get('/new', async (req, res) => {
-  const departments = await Department.findAll();
+  const departments = await Departament.findAll();
   res.render('incidencies/new', { departments });
 });
 
@@ -34,7 +34,7 @@ router.post('/create', async (req, res) => {
 router.get('/:id/edit', async (req, res) => {
   try{
   const incident = await Incident.findByPk(req.params.id);
-  const departments = await Department.findAll();
+  const departments = await Departament.findAll();
   if (!incident) return res.status(404).send('Incidència no trobada');
   res.render('incidencies/edit', { incident, departments });
 }

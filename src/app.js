@@ -4,17 +4,17 @@ const path = require('path');
 const sequelize = require('./db');
 
 // Models
-const Department = require('./models/Department');
+const Departament = require('./models/Departament');
 const Incident = require('./models/Incidencia');
-const Action = require('./models/Actuacio');
+const Actuacio = require('./models/Actuacio');
 const Usuari = require('./models/Usuari');
 const Tecnic = require('./models/Tecnic');
 
 // Relacions
 
 // Incidència i Accions
-Incident.hasMany(Action, { foreignKey: 'incidentid', onDelete: 'CASCADE' });
-Action.belongsTo(Incident, { foreignKey: 'incidentid' });
+Incident.hasMany(Actuacio, { foreignKey: 'incidentid', onDelete: 'CASCADE' });
+Actuacio.belongsTo(Incident, { foreignKey: 'incidentid' });
 
 // Usuari i Incidència
 Usuari.hasMany(Incident, { foreignKey: 'usuari_id', onDelete: 'CASCADE' });
@@ -25,15 +25,15 @@ Tecnic.hasMany(Incident, { foreignKey: 'tecnic_id', onDelete: 'CASCADE' });
 Incident.belongsTo(Tecnic, { foreignKey: 'tecnic_id', onDelete: 'CASCADE' });
 
 // Tecnic i Accions
-Tecnic.hasMany(Action, { foreignKey: 'tecnic_id' });
-Action.belongsTo(Tecnic, { foreignKey: 'tecnic_id' });
+Tecnic.hasMany(Actuacio, { foreignKey: 'tecnic_id' });
+Actuacio.belongsTo(Tecnic, { foreignKey: 'tecnic_id' });
 
 // Usuari i Tecnic
 Usuari.hasOne(Tecnic, { foreignKey: 'usuariId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 Tecnic.belongsTo(Usuari, { foreignKey: 'usuariId', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
 
-Incident.belongsTo(Department, { foreignKey: 'departmentId', onDelete: 'CASCADE' });
-Department.hasMany(Incident, { foreignKey: 'departmentId', onDelete: 'CASCADE' });
+Incident.belongsTo(Departament, { foreignKey: 'departamentId', onDelete: 'CASCADE' });
+Departament.hasMany(Incident, { foreignKey: 'departamentId', onDelete: 'CASCADE' });
 
 // Inicialització d’Express
 const app = express();
@@ -58,7 +58,7 @@ app.use('/incidencies', incidentRoutesEJS);
 // Ruta principal
 app.get('/', async (req, res) => {
   try {
-    const incidents = await Incident.findAll({ include: [Department, Tecnic, Usuari, Actuacio] });
+    const incidents = await Incident.findAll({ include: [Departament, Tecnic, Usuari, Actuacio] });
     res.render('index', { incidents });
   } catch (error) {
     console.error('Error carregant les incidències:', error.message);
@@ -75,13 +75,11 @@ const port = process.env.PORT ||3000;
     await sequelize.sync({ force: true }); // Força la recreació de totes les taules
     console.log('📦 Taules creades correctament');
 
-    Department.create({
+    await Departament.create({
       nom: 'Matemàtiques',	
-      
     });
-    Department.create({
+    await Departament.create({
       nom: 'Informàtica',	
-      
     });
 
 
