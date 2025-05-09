@@ -1,0 +1,20 @@
+<% if (incidencies && incidencies.length > 0) { %>
+    <ul class="list-group">
+      <% incidencies.forEach(incidencia => { %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <small><strong>Descripció:</strong> <%= incidencia.description %></small><br>
+            <small><strong>Departament:</strong> <%= incidencia.Department ? incidencia.Department.nom : 'Desconegut' %></small><br>
+            <small><strong>Prioritat:</strong> <%= incidencia.priority %></small><br>
+            <small><strong>Tècnic:</strong> <%= incidencia.Tecnic ? incidencia.Tecnic.nom : 'No assignat' %></small>
+          </div>
+          <div>
+            <a href="/incidencies/<%= incidencia.id %>/edit" class="btn btn-sm btn-warning me-2">Editar</a>
+            <a href="/incidencies/<%= incidencia.id %>/delete" class="btn btn-sm btn-danger">Eliminar</a>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p class="text-muted">No hi ha incidències disponibles.</p>
+  <% } %>

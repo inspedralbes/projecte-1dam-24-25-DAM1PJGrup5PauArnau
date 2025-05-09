@@ -6,8 +6,9 @@ const Departament = require('../models/Departament');
 // Llistar incidències
 router.get('/', async (req, res) => {
   try {
-    const incidents = await Incident.findAll({ include: Departament });
-    res.render('incidencies/list', { incidents });
+    const incidencies = await Incident.findAll({ include: [{ model: Departament, attributes: ['nom'] }] 
+    });
+    res.render('incidencies/list', { incidencies });
   } catch (error) {
     res.status(500).send('Error al recuperar incidències'+error.message);
   }
@@ -33,10 +34,10 @@ router.post('/create', async (req, res) => {
 // Formulari d'edició
 router.get('/:id/edit', async (req, res) => {
   try{
-  const incident = await Incident.findByPk(req.params.id);
+  const incidencies = await Incident.findByPk(req.params.id);
   const departments = await Departament.findAll();
-  if (!incident) return res.status(404).send('Incidència no trobada');
-  res.render('incidencies/edit', { incident, departments });
+  if (!incidencies) return res.status(404).send('Incidència no trobada');
+  res.render('incidencies/edit', { incidencies, departments });
 }
   catch (error) {
     res.status(500).send('Error al carregar el formulari d\'edició'+error.message);
@@ -47,10 +48,10 @@ router.get('/:id/edit', async (req, res) => {
 router.post('/:id/update', async (req, res) => {
   try{
     const { priority } = req.body;
-    const incident = await Incident.findByPk(req.params.id);
-    if (!incident) return res.status(404).send('Incidència no trobada');
-    Object.assign(incident, {  priority });
-    await incident.save();
+    const incidencies = await Incident.findByPk(req.params.id);
+    if (!incidencies) return res.status(404).send('Incidència no trobada');
+    Object.assign(incidencies, { priority });
+    await incidencies.save();
     res.redirect('/incidencies');
   }
   catch (error) {
@@ -60,9 +61,9 @@ router.post('/:id/update', async (req, res) => {
 
 // Eliminar incidència
 router.get('/:id/delete', async (req, res) => {
-  const incident = await Incident.findByPk(req.params.id);
-  if (!incident) return res.status(404).send('Incidència no trobada');
-  await incident.destroy();
+  const incidencies = await Incident.findByPk(req.params.id);
+  if (!incidencies) return res.status(404).send('Incidència no trobada');
+  await incidencies.destroy();
   res.redirect('/incidencies');
 });
 

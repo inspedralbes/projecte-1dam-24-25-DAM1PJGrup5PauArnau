@@ -2,17 +2,17 @@
 
 <h1>Llista d'Incidències</h1>
 <a class="btn btn-primary mb-3" href="/incidencies/new">Afegir Incidència</a>
+
 <ul class="list-group">
-  <% incidents.forEach(incident => { %>
+  <% incidencies.forEach(inc => { %>
     <li class="list-group-item d-flex justify-content-between align-items-center">
       <span>
-        <strong><%= incident.description %></strong><br>
-        <small><strong>Prioritat:</strong> <%= incident.priority %></small><br>
-        <small><strong>Departament:</strong> <%= incident.Department ? incident.Department.name : 'Desconegut' %></small>
-      </span>
+        <strong>Descripció:</strong> <%= inc.descripcio %><br>
+        <small><strong>Prioritat:</strong> <%= inc.prioritat %></small><br>
+        <small><strong>Departament:</strong> <%= inc.Departament ? inc.Departament.nom : 'Sense departament' %></small>      </span>
       <span>
-        <a href="/incidencies/<%= incident.id %>/edit" class="btn btn-warning">Editar</a>
-        <a href="/incidencies/<%= incident.id %>/delete" class="btn btn-danger">Eliminar</a>
+        <a href="/incidencies/<%= inc.id %>/edit" class="btn btn-warning">Editar</a>
+        <a href="/incidencies/<%= inc.id %>/delete" class="btn btn-danger">Eliminar</a>
       </span>
     </li>
   <% }) %>

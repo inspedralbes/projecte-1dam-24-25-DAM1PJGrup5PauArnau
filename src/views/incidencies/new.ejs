@@ -19,6 +19,7 @@
     <label class="form-label">Departament</label>
     <select name="departmentId" class="form-select" required>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         <option value="inf1">Informàtica</option>
         <option value=""></option>
@@ -27,6 +28,11 @@
         <option value="nom">Informatica</option>
         <option value="nom">Matematicas</option>
 >>>>>>> 24fceebf49b17e0eb5a4ca5b80f0e88109831ae5
+=======
+      <% departments.forEach(dep => { %>
+        <option value="<%= dep.id %>"><%= dep.nom %></option>
+      <% }) %>
+>>>>>>> dab825048a46d1b4d5e19dc4e938eeb880a5b983
     </select>
   </div>
   <button type="submit" class="btn btn-success">Crear Incidència</button>

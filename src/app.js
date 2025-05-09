@@ -72,16 +72,8 @@ const port = process.env.PORT ||3000;
 // Sync DB i iniciar servidor
 (async () => {
   try {
-    await sequelize.sync({ force: true }); // Força la recreació de totes les taules
+    await sequelize.sync({ alter: true });
     console.log('📦 Taules creades correctament');
-
-    await Departament.create({
-      nom: 'Matemàtiques',	
-    });
-    await Departament.create({
-      nom: 'Informàtica',	
-    });
-
 
     app.listen(port, () => {
       console.log(`🚀 Servidor escoltant a http://localhost:${port}`);
