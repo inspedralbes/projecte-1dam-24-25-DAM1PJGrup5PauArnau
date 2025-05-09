@@ -5,19 +5,30 @@
 <form action="/incidencies/create" method="POST">
   <div class="mb-3">
     <label class="form-label">Descripció</label>
-    <input type="text" name="description" class="form-control" required>
+    <input type="text" id="descripcio" name="descripcio" placeholder="Escriu la descripcio" class="form-control" required>
   </div>
-
+  <div class="mb-3">
+    <label for="prioritat" class="form-label">Prioritat</label>
+    <select class="form-select" id="prioritat" name="prioritat" required>
+      <option value="Alta">Alta</option>
+      <option value="Mitjana">Mitjana</option>
+      <option value="Baixa">Baixa</option>
+    </select>
+  </div>
   <div class="mb-3">
     <label class="form-label">Departament</label>
     <select name="departmentId" class="form-select" required>
+<<<<<<< HEAD
 
         <option value="inf1">Informàtica</option>
         <option value=""></option>
 
+=======
+        <option value="nom">Informatica</option>
+        <option value="nom">Matematicas</option>
+>>>>>>> 24fceebf49b17e0eb5a4ca5b80f0e88109831ae5
     </select>
   </div>
-
   <button type="submit" class="btn btn-success">Crear Incidència</button>
 </form>
 

@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
 const Incident = sequelize.define('Incident', {
-  decripcio: {
+  descripcio: {
     type: DataTypes.TEXT,
     allowNull: false,
   },
@@ -11,12 +11,12 @@ const Incident = sequelize.define('Incident', {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
-  Resolta: {
+  resolta: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
-  Prioritat: {
-    type: DataTypes.ENUM('Alta', 'Mitja', 'Baixa'),
+  prioritat: {
+    type: DataTypes.ENUM('Alta', 'Mitjana', 'Baixa'),
     allowNull: true,
   },
 });
