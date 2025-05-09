@@ -5,14 +5,15 @@
 <form action="/incidencies/create" method="POST">
   <div class="mb-3">
     <label class="form-label">Descripció</label>
-    <input type="text" name="description" class="form-control" required>
+    <input type="text" name="description" class="form-control" id="nom" name="nom" placeholder="Escriu la descripcio" required>
   </div>
 
   <div class="mb-3">
     <label class="form-label">Departament</label>
     <select name="departmentId" class="form-select" required>
       <% departments.forEach(dep => { %>
-        <option value="<%= dep.id %>"><%= dep.name %></option>
+        <option value="<%= dep.id %>"><%= dep.name %>Informatica</option>
+        <option value="<%= dep.id %>"><%= dep.name %>Matematicas</option>
       <% }) %>
     </select>
   </div>
