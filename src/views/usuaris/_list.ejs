@@ -1,22 +1,28 @@
 <%- include('../partials/header', { title: 'Llista d\'Incidències' }) %>
 
-<h1>Llista d'Incidències</h1>
-<a class="btn btn-primary mb-3" href="/incidents/new">Afegir Incidència</a>
-<ul class="list-group">
-  <% incidents.forEach(incident => { %>
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-      <span>
-        <strong><%= incident.description %></strong><br>
-        <small><strong>Departament:</strong> <%= incident.Department ? incident.Department.name : 'Desconegut' %></small>
-        <br>
-        <small><strong>Prioritat:</strong> <%= incident.priority %></small>
-      </span>
-      <span>
-        <a href="/incidents/<%= incident.id %>/edit" class="btn btn-warning">Editar</a>
-        <a href="/incidents/<%= incident.id %>/delete" class="btn btn-danger">Eliminar</a>
-      </span>
-    </li>
-  <% }) %>
-</ul>
+<div class="container mt-4">
+  <h1 class="mb-4">Llista d'Incidències</h1>
+  <a class="btn btn-primary mb-3" href="/incidencies/new">Afegir Incidència</a>
+
+  <% if (incidencies && incidencies.length > 0) { %>
+    <ul class="list-group">
+      <% incidencies.forEach(incidencies => { %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <small><strong>Descripció:</strong><%= incidencia.descripcio %></small>
+            <small><strong>Departament:</strong> <%= incidencia.Department ? incidenciaDepartment.name : 'Desconegut' %></small><br>
+            <small><strong>Prioritat:</strong> <%= incidencia.prioritat %></small>
+          </div>
+          <div>
+            <a href="/incidencia/<%= incidencia.id %>/edit" class="btn btn-sm btn-warning me-2">Editar</a>
+            <a href="/incidencia/<%= incidencia.id %>/delete" class="btn btn-sm btn-danger">Eliminar</a>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p class="text-muted">No hi ha incidències disponibles.</p>
+  <% } %>
+</div>
 
 <%- include('../partials/footer') %>

@@ -22,8 +22,8 @@ router.get('/new', async (req, res) => {
 // Crear incidència
 router.post('/create', async (req, res) => {
   try {
-    const { description, priority, departmentId } = req.body;
-    await Incident.create({ description, priority, departmentId });
+    const { descripcio, prioritat, departmentId } = req.body;
+    await Incident.create({ descripcio, prioritat, departmentId });
     res.redirect('/incidencies');
   } catch (error) {
     res.status(500).send('Error al crear incidència'+error.message);
