@@ -18,8 +18,9 @@
   <div class="mb-3">
     <label class="form-label">Departament</label>
     <select name="departmentId" class="form-select" required>
-        <option value="nom">Informatica</option>
-        <option value="nom">Matematicas</option>
+      <% departments.forEach(dep => { %>
+        <option value="<%= dep.id %>"><%= dep.nom %></option>
+      <% }) %>
     </select>
   </div>
   <button type="submit" class="btn btn-success">Crear Incidència</button>
