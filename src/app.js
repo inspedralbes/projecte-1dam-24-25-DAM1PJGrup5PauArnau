@@ -39,6 +39,7 @@ Departament.hasMany(Incident, { foreignKey: 'departamentId', onDelete: 'CASCADE'
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('public'));
 
 // Motor de plantilles
 app.set('view engine', 'ejs');
@@ -74,6 +75,11 @@ const port = process.env.PORT ||3000;
   try {
     await sequelize.sync({ alter: true });
     console.log('📦 Taules creades correctament');
+
+    const tec1 = Tecnic.create({nom:"ALVARO"});
+    const tec2 = Tecnic.create({nom:"JOAN"}); 
+ 
+    //  const inc1 = Incident.create({nom:"JOAN"}); 
 
     app.listen(port, () => {
       console.log(`🚀 Servidor escoltant a http://localhost:${port}`);

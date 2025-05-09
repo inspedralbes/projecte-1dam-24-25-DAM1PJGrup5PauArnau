@@ -3,20 +3,13 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
 const Tecnic = sequelize.define('Tecnic', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    references: {
-      model: 'usuaris',
-      key: 'id'
-    }
-  },
-  especialitat: {
+ 
+  nom: {
     type: DataTypes.STRING,
     allowNull: false
   }
 }, {
-  tableName: 'tecnics',
+  tableName: 'Tecnics',
   timestamps: false
 });
 

@@ -2,13 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 // Ruta per al dashboard
-router.get('/dashboard', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    // Obté les dades de les incidències amb el departament associat
-    const incidents = await Incident.findAll({ include: [Department] });
-    res.render('admin/dashboard', { incidents }); // Passa les dades a la vista
+    res.render('admin/dashboard'); 
   } catch (error) {
-    console.error('Error carregant el dashboard:', error);
+    console.error('Error carregant el dashboard:'+error.message);
     res.status(500).send('Error carregant el dashboard');
   }
 });

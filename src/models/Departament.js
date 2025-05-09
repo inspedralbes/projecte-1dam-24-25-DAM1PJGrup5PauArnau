@@ -2,7 +2,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
-const Departament = sequelize.define('Department', {
+const Departament = sequelize.define('Departament', {
   nom: {
     type: DataTypes.STRING,
     allowNull: false,

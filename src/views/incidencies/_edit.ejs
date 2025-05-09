@@ -20,8 +20,8 @@
   <div class="mb-3">
     <label class="form-label">Departament</label>
     <select name="departmentId" class="form-select" required>
-      <% departments.forEach(dep => { %>
-        <option value="<%= dep.id %>" <%= dep.id === incident.departmentId ? 'selected' : '' %>><%= dep.nom %></option>
+      <% departaments.forEach(dep => { %>
+        <option value="<%= dep.id %>" <%= dep.id === incident.departamentId ? 'selected' : '' %>><%= dep.nom %></option>
       <% }) %>
     </select>
   </div>
