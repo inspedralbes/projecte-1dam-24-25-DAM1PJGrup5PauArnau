@@ -7,6 +7,7 @@
             <small><strong>Descripció:</strong> <%= incidencia.description %></small><br>
             <small><strong>Departament:</strong> <%= incidencia.Department ? incidencia.Department.nom : 'Desconegut' %></small><br>
             <small><strong>Prioritat:</strong></small>
+            <small><strong>Estat:</strong></small>
             <select name="prioritat" class="form-select form-select-sm">
               <option value="Baixa" <%= incidencia.priority === 'Baixa' ? 'selected' : '' %>>Baixa</option>
               <option value="Mitjana" <%= incidencia.priority === 'Mitjana' ? 'selected' : '' %>>Mitjana</option>

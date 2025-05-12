@@ -98,6 +98,7 @@ const port = process.env.PORT ||3000;
   try {
     await sequelize.sync({ alter: true }); // Força la sincronització de la base de dades
     console.log('📦 Taules creades correctament');
+
     //  const inc1 = Incident.create({nom:"JOAN"}); 
 
     app.listen(port, () => {
