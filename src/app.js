@@ -51,6 +51,9 @@ const usuarisRoutes = require('./routes/usuarisEJS.routes');
 const incidentRoutesEJS = require('./routes/incidentsEJS.routes');
 const adminRoutes = require('./routes/adminEJS.routes');
 const departamentsRoutes = require('./routes/departamentsEJS.routes');
+app.get('/', (req, res) => {
+  res.render('index'); // Renderiza la vista `index.ejs`
+});
 
 // Altres rutes...
 app.use('/admin', adminRoutes);
