@@ -1,99 +1,87 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestor Incidencies</title>
+    <title>Gestor Incidències</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
 </head>
 <body>
   <%- include('partials/header', { title: 'Catàleg d\'Incidències' }) %>
-<div class="jumbotron">
-  <div class="container">
-    <h1 class="display-4">Catàleg d'Incidències</h1>
-    <p class="lead">Explora les incidències reportades pels diferents departaments.</p>
-  </div>
-</div>
 
-<div class="container">
-  <!-- Filters -->
-  <div id="filters" class="row mb-4">
-    <div class="col-md-6">
-      <div class="input-group">
-        <input type="text" id="searchInput" class="form-control" placeholder="Cerca per descripció, departament...">
-        <span class="input-group-text"><i class="bi bi-search"></i></span>
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-4">Catàleg d'Incidències</h1>
+      <p class="lead">Explora les incidències reportades pels diferents departaments.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Filters -->
+    <div id="filters" class="row mb-4">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input type="text" id="searchInput" class="form-control" placeholder="Cerca per descripció, departament...">
+          <span class="input-group-text"><i class="bi bi-search"></i></span>
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <select id="departmentFilter" class="form-select">
+          <option value="all">Tots els departaments</option>
+          <% departaments.forEach(dep => { %>
+            <option value="<%= dep.id %>"><%= dep.nom %></option>
+          <% }) %>
+        </select>
       </div>
     </div>
-    
-    <div class="col-md-6">
-      <select id="departmentFilter" class="form-select">
-        <option value="all">Tots els departaments</option>
-        <% departaments.forEach(dep => { %>
-          <option value="<%= dep.id %>"><%= dep.nom %></option>
+
+    <!-- Incident Cards -->
+    <div class="row">
+      <% if (incidencies && incidencies.length > 0) { %>
+        <% incidencies.forEach(inc => { %>
+          <div class="col-md-4 mb-4 incident-card-container" data-department="<%= inc.departmentId %>">
+            <div class="card incident-card h-100" data-incident-id="<%= inc.id %>">
+              <span class="badge bg-danger department-badge">
+                <%= inc.Departament ? inc.Departament.nom : 'Sense departament' %>
+              </span>
+              <div class="card-body">
+                <h5 class="card-title"><%= inc.descripcio %></h5>
+                <p class="card-text">
+                  <strong>Prioritat:</strong> <small><%= inc.prioritat %></small><br>
+                  <strong>Data de creació:</strong> <small><%= inc.dataCreacio %></small>
+                </p>
+              </div>
+              <div class="card-footer">
+                <a href="/incidencies/<%= inc.id %>/edit" class="btn btn-sm btn-outline-primary">Editar</a>
+                <button class="btn btn-sm btn-outline-danger float-end">Detalls</button>
+              </div>
+            </div>
+          </div>
         <% }) %>
-      </select>
+      <% } else { %>
+        <p class="text-muted">No hi ha incidències disponibles.</p>
+      <% } %>
     </div>
   </div>
 
-  <!-- Incident Cards -->
-  <div class="row">
-<<<<<<< HEAD
-    <% if (incidents && incidents.length > 0) { %>
-      <% incidents.forEach(inc => { %>
-        <div class="col-md-4 mb-4 incident-card-container" data-department="<%= incident.departmentId %>">
-          <div class="card incident-card h-100" data-incident-id="<%= incident.id %>">
-            <span class="badge bg-danger department-badge"></span>
-            <div class="card-body">
-              <h5 class="card-title"><%= inc.description %></h5>
-              <p class="card-text">
-                <strong>Prioritat:</strong> <%= inc.prioritat %><br>
-                <strong>Data de creació:</strong> <%= inc.dataCreacio %>
-              </p>
-            </div>
-            <div class="card-footer">
-              <a href="/incidencies/<%= incident.id %>/edit" class="btn btn-sm btn-outline-primary">Editar</a>
-=======
-    <% if (incidencies && incidencies.length > 0) { %>
-      <% incidencies.forEach(inc => { %>
-        <div class="col-md-4 mb-4 incident-card-container" data-department="<%= inc.departmentId %>">
-          <div class="card incident-card h-100" data-incident-id="<%= inc.id %>">
-            <span class="badge bg-danger department-badge">
-              <%= inc.Departament ? inc.Departament.nom : 'Sense departament' %>
-            </span>
-            <div class="card-body">
-              <h5 class="card-title"><%= inc.descripcio %></h5>
-              <p class="card-text">
-                <strong>Prioritat:</strong><small><%= inc.prioritat %></small><br>
-                <strong>Data de creació:</strong><small></small><%= inc.dataCreacio %></small>
-              </p>
-            </div>
-            <div class="card-footer">
-              <a href="/incidencies/<%= inc.id %>/edit" class="btn btn-sm btn-outline-primary">Editar</a>
->>>>>>> 58318fafbf5b5bddb6a68bec7a15f567617bf946
-              <button class="btn btn-sm btn-outline-danger float-end">Detalls</button>
-            </div>
-          </div>
-        </div>
-      <% }) %>
-    <% } else { %>
-      <p class="text-muted">No hi ha incidències disponibles.</p>
-    <% } %>
-  </div>
+  <%- include('partials/footer') %>
 
-<%- include('partials/footer') %>
-<!-- Afegir JavaScript per interactivitat -->
-<script src="/static/js/main.js"></script>
-<script>
-  document.getElementById('departmentFilter').addEventListener('change', function () {
-    const selectedDepartment = this.value;
-    const cards = document.querySelectorAll('.incident-card-container');
+  <!-- Afegir JavaScript per interactivitat -->
+  <script src="/static/js/main.js"></script>
+  <script>
+    document.getElementById('departmentFilter').addEventListener('change', function () {
+      const selectedDepartment = this.value;
+      const cards = document.querySelectorAll('.incident-card-container');
 
-    cards.forEach(card => {
-      if (selectedDepartment === 'all' || card.dataset.department === selectedDepartment) {
-        card.style.display = 'block';
-      } else {
-        card.style.display = 'none';
-      }
+      cards.forEach(card => {
+        if (selectedDepartment === 'all' || card.dataset.department === selectedDepartment) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
     });
-  });
-</script>
+  </script>
 </body>
+</html>
