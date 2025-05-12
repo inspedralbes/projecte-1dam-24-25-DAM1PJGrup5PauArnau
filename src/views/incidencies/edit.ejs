@@ -1,0 +1,36 @@
+<%- include('../partials/header', { title: 'Editar Incidència' }) %>
+
+<h1>Editar Incidència</h1>
+
+<form action="/incidencies/<%= incidencia.id %>/update" method="POST">
+  <div class="form-group mb-3">
+    <label for="departamentId">Departament:</label>
+    <select name="departmentId" id="departmentId" class="form-select">
+      <% departaments.forEach(dep => { %>
+        <option value="<%= dep.id %>" <%= dep.id === incidencia.departmentId ? 'selected' : '' %>><%= dep.nom %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="form-group mb-3">
+    <label for="prioritat">Prioritat:</label>
+    <select name="prioritat" id="prioritat" class="form-select">
+      <option value="Baixa" <%= incidencia.prioritat === 'Baixa' ? 'selected' : '' %>>Baixa</option>
+      <option value="Mitjana" <%= incidencia.prioritat === 'Mitjana' ? 'selected' : '' %>>Mitjana</option>
+      <option value="Alta" <%= incidencia.prioritat === 'Alta' ? 'selected' : '' %>>Alta</option>
+    </select>
+  </div>
+
+  <div class="form-group mb-3">
+    <label for="tecnicId">Tècnic:</label>
+    <select name="tecnicId" id="tecnicId" class="form-select">
+      <% tecnics.forEach(tecnic => { %>
+        <option value="<%= tecnic.id %>" <%= tecnic.id === incidencia.tecnic_id ? 'selected' : '' %>><%= tecnic.nom %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+
+<%- include('../partials/footer') %>

@@ -27,14 +27,16 @@
     <div class="col-md-6">
       <select id="departmentFilter" class="form-select">
         <option value="all">Tots els departaments</option>
-        <option value="inf1">Informàtica</option>
-        <option value="art1">Arts</option>
+        <% departaments.forEach(dep => { %>
+          <option value="<%= dep.id %>"><%= dep.nom %></option>
+        <% }) %>
       </select>
     </div>
   </div>
 
   <!-- Incident Cards -->
   <div class="row">
+<<<<<<< HEAD
     <% if (incidents && incidents.length > 0) { %>
       <% incidents.forEach(inc => { %>
         <div class="col-md-4 mb-4 incident-card-container" data-department="<%= incident.departmentId %>">
@@ -49,6 +51,24 @@
             </div>
             <div class="card-footer">
               <a href="/incidencies/<%= incident.id %>/edit" class="btn btn-sm btn-outline-primary">Editar</a>
+=======
+    <% if (incidencies && incidencies.length > 0) { %>
+      <% incidencies.forEach(inc => { %>
+        <div class="col-md-4 mb-4 incident-card-container" data-department="<%= inc.departmentId %>">
+          <div class="card incident-card h-100" data-incident-id="<%= inc.id %>">
+            <span class="badge bg-danger department-badge">
+              <%= inc.Departament ? inc.Departament.nom : 'Sense departament' %>
+            </span>
+            <div class="card-body">
+              <h5 class="card-title"><%= inc.descripcio %></h5>
+              <p class="card-text">
+                <strong>Prioritat:</strong><small><%= inc.prioritat %></small><br>
+                <strong>Data de creació:</strong><small></small><%= inc.dataCreacio %></small>
+              </p>
+            </div>
+            <div class="card-footer">
+              <a href="/incidencies/<%= inc.id %>/edit" class="btn btn-sm btn-outline-primary">Editar</a>
+>>>>>>> 58318fafbf5b5bddb6a68bec7a15f567617bf946
               <button class="btn btn-sm btn-outline-danger float-end">Detalls</button>
             </div>
           </div>
@@ -58,10 +78,22 @@
       <p class="text-muted">No hi ha incidències disponibles.</p>
     <% } %>
   </div>
-</div>
 
 <%- include('partials/footer') %>
 <!-- Afegir JavaScript per interactivitat -->
 <script src="/static/js/main.js"></script>
+<script>
+  document.getElementById('departmentFilter').addEventListener('change', function () {
+    const selectedDepartment = this.value;
+    const cards = document.querySelectorAll('.incident-card-container');
 
+    cards.forEach(card => {
+      if (selectedDepartment === 'all' || card.dataset.department === selectedDepartment) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+</script>
 </body>

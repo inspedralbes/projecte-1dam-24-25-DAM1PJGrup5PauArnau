@@ -2,11 +2,16 @@ const express = require('express');
 const router = express.Router();
 const Incident = require('../models/Incidencia');
 const Departament = require('../models/Departament');
+const Tecnic = require('../models/Tecnic');
 
 // Llistar incidències
 router.get('/', async (req, res) => {
   try {
-    const incidencies = await Incident.findAll({ include: [{ model: Departament, attributes: ['nom'] }] 
+    const incidencies = await Incident.findAll({
+      include: [
+        { model: Departament, attributes: ['nom'] },
+        { model: Tecnic, attributes: ['nom'] } // <-- aquí afegim el tècnic
+      ]
     });
     console.log(incidencies);
     res.render('incidencies/list', { incidencies });
@@ -35,28 +40,45 @@ router.post('/create', async (req, res) => {
 // Formulari d'edició
 router.get('/:id/edit', async (req, res) => {
   try {
-    const incident = await Incident.findByPk(req.params.id); // Canviat a "incident"
-    const departaments = await Departament.findAll();
-    if (!incident) return res.status(404).send('Incidència no trobada');
-    res.render('incidencies/_edit', { incident, departaments }); // Canviat a "incident"
-  } 
-  catch (error) {
-    res.status(500).send('Error al carregar el formulari d\'edició: ' + error.message);
+    // Carrega la incidència per ID amb el departament i tècnic associats
+    const incidencia = await Incident.findByPk(req.params.id, {
+      include: [
+        { model: Departament, attributes: ['id', 'nom'] },
+        { model: Tecnic, attributes: ['id', 'nom'] }
+      ]
+    });
+
+    // Si no es troba la incidència, retorna un error 404
+    if (!incidencia) return res.status(404).send('Incidència no trobada');
+
+    // Carrega tots els departaments i tècnics per als desplegables
+    const departaments = await Departament.findAll({ attributes: ['id', 'nom'] });
+    const tecnics = await Tecnic.findAll({ attributes: ['id', 'nom'] });
+
+    // Renderitza la vista d'edició amb les dades
+    res.render('incidencies/edit', { incidencia, departaments, tecnics });
+  } catch (error) {
+    console.error('Error al carregar el formulari d\'edició:', error.message);
+    res.status(500).send('Error al carregar el formulari d\'edició');
   }
 });
 
 // Actualitzar incidència
 router.post('/:id/update', async (req, res) => {
-  try{
-    const { priority } = req.body;
-    const incidencies = await Incident.findByPk(req.params.id);
-    if (!incidencies) return res.status(404).send('Incidència no trobada');
-    Object.assign(incidencies, { priority });
-    await incidencies.save();
+  try {
+    const { prioritat, departmentId, tecnicId } = req.body;
+
+    // Actualitza la incidència a la base de dades
+    await Incident.update(
+      { prioritat, departmentId, tecnic_id: tecnicId },
+      { where: { id: req.params.id } }
+    );
+
+    // Redirigeix a la llista d'incidències
     res.redirect('/incidencies');
-  }
-  catch (error) {
-    res.status(500).send('Error al actualitzar incidència'+error.message);
+  } catch (error) {
+    console.error('Error actualitzant la incidència:', error.message);
+    res.status(500).send('Error actualitzant la incidència');
   }
 });
 
