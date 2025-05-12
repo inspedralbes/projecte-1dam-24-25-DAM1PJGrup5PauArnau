@@ -44,7 +44,7 @@ app.use('/images', express.static(path.join(__dirname, 'public/images')));
 const incidentRoutesEJS = require('./routes/incidentsEJS.routes');
 const adminRoutes = require('./routes/adminEJS.routes');
 const departamentsRoutes = require('./routes/departamentsEJS.routes');
-<<<<<<< HEAD
+
 const actionsRoutes = require('./routes/actuacionsEJS.routes');
 
 // Rutes
@@ -59,11 +59,8 @@ app.get('/', async (req, res) => {
     console.error('Error carregant les incidències:', error.message);
     res.status(500).send('Error carregant les incidències');
   }
-=======
-app.get('/', (req, res) => {
-  res.render('index'); // Renderiza la vista `index.ejs`
->>>>>>> ea8027e2ae20956feb1a5dc10302dbe9b6054167
 });
+
 
 // Altres rutes...
 app.use('/admin', adminRoutes);
@@ -100,7 +97,7 @@ const port = process.env.PORT ||3000;
 // Sync DB i iniciar servidor
 (async () => {
   try {
-    await sequelize.sync({ alter: true });
+    await sequelize.sync({});
     console.log('📦 Taules creades correctament'); 
  
     //  const inc1 = Incident.create({nom:"JOAN"}); 

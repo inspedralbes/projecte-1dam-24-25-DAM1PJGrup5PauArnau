@@ -40,26 +40,20 @@ router.post('/create', async (req, res) => {
 // Formulari d'edició
 router.get('/:id/edit', async (req, res) => {
   try {
-    // Carrega la incidència per ID amb el departament i tècnic associats
-    const incidencia = await Incident.findByPk(req.params.id, {
-      include: [
-        { model: Departament, attributes: ['id', 'nom'] },
-        { model: Tecnic, attributes: ['id', 'nom'] }
-      ]
-    });
+    // Carrega la incidència específica
+    const incidencia = await Incident.findByPk(req.params.id, { include: Departament });
+    if (!incidencia) {
+      return res.status(404).send('Incidència no trobada');
+    }
 
-    // Si no es troba la incidència, retorna un error 404
-    if (!incidencia) return res.status(404).send('Incidència no trobada');
+    // Carrega totes les incidències (si calen a la vista)
+    const incidencies = await Incident.findAll({ include: Departament });
 
-    // Carrega tots els departaments i tècnics per als desplegables
-    const departaments = await Departament.findAll({ attributes: ['id', 'nom'] });
-    const tecnics = await Tecnic.findAll({ attributes: ['id', 'nom'] });
-
-    // Renderitza la vista d'edició amb les dades
-    res.render('incidencies/edit', { incidencia, departaments, tecnics });
+    // Passa la incidència i la llista d'incidències a la vista
+    res.render('incidencies/edit', { incidencia, incidencies });
   } catch (error) {
-    console.error('Error al carregar el formulari d\'edició:', error.message);
-    res.status(500).send('Error al carregar el formulari d\'edició');
+    console.error('Error carregant la incidència:', error.message);
+    res.status(500).send('Error carregant la incidència');
   }
 });
 
