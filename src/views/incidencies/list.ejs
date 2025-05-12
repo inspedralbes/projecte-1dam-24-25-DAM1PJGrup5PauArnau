@@ -1,8 +1,7 @@
 <%- include('../partials/header', { title: 'Llista d\'Incidències' }) %>
 
 <h1 class="mb-4">Llista d'Incidències</h1>
-
-<<<<<<< HEAD
+<a class="btn btn-primary mb-3" href="/incidencies/new">Afegir Incidència</a>
 <table class="table table-bordered">
   <thead>
     <tr>
@@ -50,7 +49,6 @@
     <% }) %>
   </tbody>
 </table>
-=======
 <ul class="list-group">
   <% incidencies.forEach(inc => { %>
     <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -67,6 +65,5 @@
     </li>
   <% }) %>
 </ul>
->>>>>>> 94de60aac0d34b2ef84341f8fea81636d3367f40
 
 <%- include('../partials/footer') %>
