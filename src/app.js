@@ -59,13 +59,25 @@ app.use('/incidencies', incidentRoutesEJS);
 app.use('/departaments', departamentsRoutes);
 
 // Ruta principal
-app.get('/', async (req, res) => {
+app.get('/incidencies', async (req, res) => {
   try {
-    const incidents = await Incident.findAll({ include: [Departament, Tecnic, Usuari, Actuacio] });
-    res.render('index', { incidents });
+    const incidencies = await Incidencia.findAll({ include: Departament }); // Asegúrate de que `id` esté incluido
+    res.render('incidencies/list', { incidencies });
   } catch (error) {
-    console.error('Error carregant les incidències:', error.message);
-    res.render('index', { incidents: [] });
+    console.error(error);
+    res.status(500).send('Error carregant les incidències');
+  }
+});
+app.get('/incidencies/:id/edit', async (req, res) => {
+  try {
+    const incidencia = await Incidencia.findByPk(req.params.id, { include: Departament });
+    if (!incidencia) {
+      return res.status(404).send('Incidència no trobada');
+    }
+    res.render('incidencies/edit', { incidencia });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error carregant la incidència');
   }
 });
 
