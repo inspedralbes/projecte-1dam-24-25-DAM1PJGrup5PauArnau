@@ -3,6 +3,11 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
 const Incident = sequelize.define('Incident', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
   descripcio: {
     type: DataTypes.TEXT,
     allowNull: false,
