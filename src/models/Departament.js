@@ -8,8 +8,6 @@ const Departament = sequelize.define('Departament', {
     allowNull: false,
     unique: true,
   }
-},{
-  tableName: 'departaments',
 });
 
 module.exports = Departament;

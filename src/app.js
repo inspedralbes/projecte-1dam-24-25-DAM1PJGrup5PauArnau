@@ -24,10 +24,8 @@ Tecnic.hasMany(Actuacio, { foreignKey: 'tecnic_id' });
 Actuacio.belongsTo(Tecnic, { foreignKey: 'tecnic_id' });
 
 // Incident i Departament
-Incident.belongsTo(Departament, { foreignKey: 'departamentId', onDelete: 'CASCADE' });
+Incident.belongsTo(Departament, { foreignKey: 'departamentId',  onDelete: 'CASCADE' });
 Departament.hasMany(Incident, { foreignKey: 'departamentId', onDelete: 'CASCADE' });
-
-Actuacio.belongsTo(Departament, { foreignKey: 'departamentId', as: 'Departament' });
 
 // Inicialització d’Express
 const app = express();
@@ -44,8 +42,8 @@ app.use('/images', express.static(path.join(__dirname, 'public/images')));
 const incidentRoutesEJS = require('./routes/incidentsEJS.routes');
 const adminRoutes = require('./routes/adminEJS.routes');
 const departamentsRoutes = require('./routes/departamentsEJS.routes');
-
 const actionsRoutes = require('./routes/actuacionsEJS.routes');
+const tecnicsRoutes = require('./routes/tecnicsEJS.routes'); 
 
 // Rutes
 app.get('/', async (req, res) => {
@@ -67,6 +65,7 @@ app.use('/admin', adminRoutes);
 app.use('/incidencies', incidentRoutesEJS);
 app.use('/departaments', departamentsRoutes);
 app.use('/actuacions', actionsRoutes);
+app.use('/tecnics', tecnicsRoutes);
 
 // Ruta principal
 app.get('/incidencies', async (req, res) => {

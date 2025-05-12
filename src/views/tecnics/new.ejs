@@ -1,0 +1,17 @@
+<%- include('../partials/header', { title: 'Afegir Tècnic' }) %>
+
+<h1>Afegir Tècnic</h1>
+
+<form action="/tecnics/create" method="POST">
+  <div class="mb-3">
+    <label for="nom" class="form-label">Nom del Tècnic</label>
+    <input type="text" id="nom" name="nom" class="form-control" placeholder="Escriu el nom del tècnic" required>
+  </div>
+  <div class="mb-3">
+    <label for="especialitat" class="form-label">Especialitat</label>
+    <input type="text" id="especialitat" name="especialitat" class="form-control" placeholder="Escriu l'especialitat del tècnic" required>
+  </div>
+  <button type="submit" class="btn btn-success">Crear Tècnic</button>
+</form>
+
+<%- include('../partials/footer') %>%>

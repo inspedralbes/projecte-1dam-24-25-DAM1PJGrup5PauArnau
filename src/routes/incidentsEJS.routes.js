@@ -7,16 +7,22 @@ const Tecnic = require('../models/Tecnic');
 // Llistar incidències
 router.get('/', async (req, res) => {
   try {
+    // Carrega totes les incidències amb el departament i el tècnic associats
     const incidencies = await Incident.findAll({
       include: [
         { model: Departament, attributes: ['nom'] },
-        { model: Tecnic, attributes: ['nom'] } // <-- aquí afegim el tècnic
-      ]
+        { model: Tecnic, attributes: ['id', 'nom'] },
+      ],
     });
-    console.log(incidencies);
-    res.render('incidencies/list', { incidencies });
+
+    // Carrega tots els tècnics per al desplegable
+    const tecnics = await Tecnic.findAll({ attributes: ['id', 'nom'] });
+
+    // Renderitza la vista amb les dades
+    res.render('incidencies/list', { incidencies, tecnics });
   } catch (error) {
-    res.status(500).send('Error al recuperar incidències'+error.message);
+    console.error('Error carregant les incidències:', error.message);
+    res.status(500).send('Error carregant les incidències');
   }
 });
 
@@ -29,11 +35,25 @@ router.get('/new', async (req, res) => {
 // Crear incidència
 router.post('/create', async (req, res) => {
   try {
-    const { descripcio, prioritat, departamentId } = req.body;
-    await Incident.create({ descripcio, prioritat, departamentId });
+    const { descripcio, prioritat, departmentId } = req.body;
+
+    // Comprova que el departament existeix
+    const departament = await Departament.findByPk(departmentId);
+    if (!departament) {
+      return res.status(404).send('Departament no trobat');
+    }
+
+    // Crea la incidència amb el departament associat
+    await Incident.create({
+      descripcio,
+      prioritat,
+      departamentId: departmentId, // Guarda la ID del departament
+    });
+
     res.redirect('/incidencies');
   } catch (error) {
-    res.status(500).send('Error al crear incidència'+error.message);
+    console.error('Error creant la incidència:', error.message);
+    res.status(500).send('Error creant la incidència');
   }
 });
 

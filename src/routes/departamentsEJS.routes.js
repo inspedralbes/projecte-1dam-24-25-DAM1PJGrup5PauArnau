@@ -40,7 +40,7 @@ router.get('/:id/edit', async (req, res) => {
   }
 });
 
-// Actualitzar
+// Actualitzar departament
 router.post('/:id/update', async (req, res) => {
   try {
     const { nom } = req.body;
@@ -55,10 +55,13 @@ router.post('/:id/update', async (req, res) => {
 });
 
 // Eliminar
-router.get('/:id/delete', async (req, res) => {
+// Eliminar departament
+router.post('/:id/delete', async (req, res) => {
   try {
     const departament = await Departament.findByPk(req.params.id);
     if (!departament) return res.status(404).send('Departament no trobat');
+
+    // Esborra el departament
     await departament.destroy();
     res.redirect('/departaments');
   } catch (error) {

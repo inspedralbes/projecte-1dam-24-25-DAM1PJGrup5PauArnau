@@ -3,11 +3,11 @@
 <h1>Editar Departament</h1>
 
 <form action="/departaments/<%= departament.id %>/update" method="POST">
-  <div class="form-group">
-    <label for="nom">Nom del departament:</label>
-    <input type="text" name="nom" id="nom" class="form-control" value="<%= departament.nom %>" required>
+  <div class="mb-3">
+    <label for="nom" class="form-label">Nom del Departament</label>
+    <input type="text" id="nom" name="nom" class="form-control" value="<%= departament.nom %>" required>
   </div>
-  <button type="submit" class="btn btn-primary mt-2">Guardar canvis</button>
+  <button type="submit" class="btn btn-primary">Guardar</button>
 </form>
 
 <%- include('../partials/footer') %>
