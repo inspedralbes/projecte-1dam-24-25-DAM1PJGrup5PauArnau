@@ -15,6 +15,7 @@ const Incident = sequelize.define('Incident', {
   dataCreacio: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
+    allowNull: false,
   },
   resolta: {
     type: DataTypes.BOOLEAN,
