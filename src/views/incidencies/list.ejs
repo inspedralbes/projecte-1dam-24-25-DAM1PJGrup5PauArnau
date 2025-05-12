@@ -10,7 +10,8 @@
       <span>
         <strong>Descripció:</strong> <%= inc.descripcio %><br>
         <small><strong>Prioritat:</strong> <%= inc.prioritat %></small><br>
-        <small><strong>Departament:</strong> <%= inc.Departament ? inc.Departament.nom : 'Sense departament' %></small>      </span>
+        <small><strong>Departament:</strong> <%= inc.Departament  ? inc.Departament.nom : 'Sense departament' %></small>      </span>
+        <small><strong>Estat:</strong> </small>
       <span>
         <a href="/incidencies/<%= inc.id %>/edit" class="btn btn-warning">Editar</a>
         <a href="/incidencies/<%= inc.id %>/delete" class="btn btn-danger">Eliminar</a>
