@@ -1,0 +1,13 @@
+<%- include('../partials/header', { title: 'Afegir Departament' }) %>
+
+<h1>Nou Departament</h1>
+
+<form action="/departaments/create" method="POST">
+  <div class="form-group">
+    <label for="nom">Nom del departament:</label>
+    <input type="text" name="nom" id="nom" class="form-control" required>
+  </div>
+  <button type="submit" class="btn btn-success mt-2">Crear</button>
+</form>
+
+<%- include('../partials/footer') %>

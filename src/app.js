@@ -50,11 +50,13 @@ app.use('/images', express.static(path.join(__dirname, 'public/images')));
 const usuarisRoutes = require('./routes/usuarisEJS.routes');
 const incidentRoutesEJS = require('./routes/incidentsEJS.routes');
 const adminRoutes = require('./routes/adminEJS.routes');
+const departamentsRoutes = require('./routes/departamentsEJS.routes');
 
 // Altres rutes...
 app.use('/admin', adminRoutes);
 app.use('/usuaris', usuarisRoutes);
 app.use('/incidencies', incidentRoutesEJS);
+app.use('/departaments', departamentsRoutes);
 
 // Ruta principal
 app.get('/', async (req, res) => {

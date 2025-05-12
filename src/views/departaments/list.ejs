@@ -1,0 +1,18 @@
+<%- include('../partials/header', { title: 'Llista de Departaments' }) %>
+
+<h1>Llista de Departaments</h1>
+<a href="/departaments/new" class="btn btn-primary mb-3">Afegir Departament</a>
+
+<ul class="list-group">
+  <% departaments.forEach(dep => { %>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span><strong>Nom:</strong> <%= dep.nom %></span>
+      <span>
+        <a href="/departaments/<%= dep.id %>/edit" class="btn btn-warning">Editar</a>
+        <a href="/departaments/<%= dep.id %>/delete" class="btn btn-danger">Eliminar</a>
+      </span>
+    </li>
+  <% }) %>
+</ul>
+
+<%- include('../partials/footer') %>
