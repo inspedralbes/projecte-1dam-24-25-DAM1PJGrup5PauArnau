@@ -97,8 +97,18 @@ const port = process.env.PORT ||3000;
 // Sync DB i iniciar servidor
 (async () => {
   try {
+
     await sequelize.sync({});
+
+    await sequelize.sync({ alter: true });
+
+    console.log('📦 Taules creades correctament');
+
+
+
+
     console.log('📦 Taules creades correctament'); 
+
  
     //  const inc1 = Incident.create({nom:"JOAN"}); 
 
