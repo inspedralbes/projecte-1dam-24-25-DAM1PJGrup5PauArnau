@@ -1,13 +1,13 @@
-<%- include('../../partials/header', { title: 'Panell d\'Administració' }) %>
+<%- include('../partials/header', { title: 'Panell d\'Administració' }) %>
 
 <h1>Panell d'Administració</h1>
 
 <div class="list-group">
-  <a href="/admin/incidents/new" class="list-group-item list-group-item-action">➕ Crear nova incidència</a>
+  <a href="../incidencies/new.ejs" class="list-group-item list-group-item-action">➕ Crear nova incidència</a>
   <a href="/departments/new" class="list-group-item list-group-item-action">🏢 Afegir Departament</a>
   <a href="/incidents" class="list-group-item list-group-item-action">📋 Veure totes les incidències</a>
   <a href="/actions" class="list-group-item list-group-item-action">🛠️ Veure Accions</a>
   <a href="/departments" class="list-group-item list-group-item-action">📂 Llista de Departaments</a>
 </div>
 
-<%- include('../../partials/footer') %>
+<%- include('../partials/footer') %>
