@@ -93,8 +93,7 @@ const port = process.env.PORT ||3000;
     await sequelize.sync({ alter: true });
     console.log('📦 Taules creades correctament');
 
-    const tec1 = Tecnic.create({nom:"ALVARO"});
-    const tec2 = Tecnic.create({nom:"JOAN"}); 
+
  
     //  const inc1 = Incident.create({nom:"JOAN"}); 
 
