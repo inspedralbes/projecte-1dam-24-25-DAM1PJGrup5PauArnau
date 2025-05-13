@@ -36,20 +36,17 @@ router.get('/new', async (req, res) => {
 router.post('/create', async (req, res) => {
   try {
     const { descripcio, prioritat, departmentId } = req.body;
-
     // Comprova que el departament existeix
     const departament = await Departament.findByPk(departmentId);
     if (!departament) {
       return res.status(404).send('Departament no trobat');
     }
-
     // Crea la incidència amb el departament associat
     await Incident.create({
       descripcio,
       prioritat,
       departamentId: departmentId, // Guarda la ID del departament
     });
-
     res.redirect('/incidencies');
   } catch (error) {
     console.error('Error creant la incidència:', error.message);
@@ -60,17 +57,16 @@ router.post('/create', async (req, res) => {
 // Formulari d'edició
 router.get('/:id/edit', async (req, res) => {
   try {
-    // Carrega la incidència específica
-    const incidencia = await Incident.findByPk(req.params.id, { include: Departament });
-    if (!incidencia) {
-      return res.status(404).send('Incidència no trobada');
-    }
+    const incidencia = await Incident.findByPk(req.params.id, {
+      include: [
+        { model: Departament, attributes: ['nom'] },
+        { model: Tecnic, attributes: ['id', 'nom'] },
+      ],
+    });
 
-    // Carrega totes les incidències (si calen a la vista)
-    const incidencies = await Incident.findAll({ include: Departament });
+    const tecnics = await Tecnic.findAll({ attributes: ['id', 'nom'] });
 
-    // Passa la incidència i la llista d'incidències a la vista
-    res.render('incidencies/edit', { incidencia, incidencies });
+    res.render('incidencies/edit', { incidencia, tecnics });
   } catch (error) {
     console.error('Error carregant la incidència:', error.message);
     res.status(500).send('Error carregant la incidència');
@@ -80,19 +76,22 @@ router.get('/:id/edit', async (req, res) => {
 // Actualitzar incidència
 router.post('/:id/update', async (req, res) => {
   try {
-    const { prioritat, departmentId, tecnicId } = req.body;
+    let { prioritat, tecnicId } = req.body;
+
+    // Si tecnicId és buit, assigna NULL
+    tecnicId = tecnicId === '' ? null : tecnicId;
 
     // Actualitza la incidència a la base de dades
     await Incident.update(
-      { prioritat, departmentId, tecnic_id: tecnicId },
+      { prioritat, tecnic_id: tecnicId },
       { where: { id: req.params.id } }
     );
 
     // Redirigeix a la llista d'incidències
     res.redirect('/incidencies');
   } catch (error) {
-    console.error('Error actualitzant la incidència:', error.message);
-    res.status(500).send('Error actualitzant la incidència');
+    console.error('Error actualitzant la incidència:' + error.message);
+    res.status(500).send('Error actualitzant la incidència: ' + error.message);
   }
 });
 

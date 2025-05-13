@@ -2,43 +2,49 @@ const express = require('express');
 const router = express.Router();
 const Incident = require('../models/Incidencia');
 const Tecnic = require('../models/Tecnic');
+const Actuacio = require('../models/Actuacio');
 
 // Ruta per mostrar les incidències
+
+// GET: Vista principal amb incidències i tècnics
 router.get('/', async (req, res) => {
   try {
-    // Carrega totes les incidències amb el tècnic associat
-    const incidencies = await Incident.findAll({
-      include: [{ model: Tecnic, attributes: ['id', 'nom'] }],
-    });
-
-    // Carrega tots els tècnics per al desplegable
+    // Carrega tots els tècnics
     const tecnics = await Tecnic.findAll({ attributes: ['id', 'nom'] });
 
-    // Renderitza la vista amb les incidències i tècnics
-    res.render('incidencies/list', { incidencies, tecnics });
+    // Carrega totes les incidències amb el tècnic associat
+    const incidencies = await Incident.findAll({
+      include: [
+        { model: Tecnic, attributes: ['id', 'nom'] },
+      ],
+    });
+
+    res.render('actuacions/list', { tecnics, incidencies });
   } catch (error) {
-    console.error('Error carregant les incidències:', error.message);
-    res.status(500).send('Error carregant les incidències');
+    console.error('Error carregant les actuacions:', error.message);
+    res.status(500).send('Error carregant les actuacions');
   }
 });
 
-// Ruta per actualitzar una incidència
-router.post('/:id/update', async (req, res) => {
+// Ruta per actualitzar una actuació
+router.post('/create', async (req, res) => {
   try {
-    const { prioritat, tecnicId } = req.body;
-
-    // Actualitza la incidència a la base de dades
-    await Incident.update(
-      { prioritat, tecnic_id: tecnicId },
-      { where: { id: req.params.id } }
-    );
-
-    // Redirigeix a la llista d'incidències
-    res.redirect('/incidencies');
-  } catch (error) {
-    console.error('Error actualitzant la incidència:', error.message);
-    res.status(500).send('Error actualitzant la incidència');
+    const { descripcio, data, temps, resolta, visible, tecnic_id, incidentid } = req.body;
+    await Actuacio.create({
+      descripcio,
+      data,
+      temps,
+      resolta: resolta === 'on',
+      visible: visible === 'on',
+      tecnic_id,
+      incidentid
+    });
+    res.redirect('/');
+  } catch (err) {
+    console.error('Error creant actuació:', err.message);
+    res.status(500).send("Error creant actuació: " + err.message);
   }
 });
+
 
 module.exports = router;

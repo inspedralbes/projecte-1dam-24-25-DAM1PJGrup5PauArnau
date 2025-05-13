@@ -10,10 +10,18 @@ const Action = sequelize.define('Action', {
   data: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
+  }, 
+  temps: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
   },
-  Resolta: {
+  resolta: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
+  },
+  visible: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
   },
 });
 

@@ -1,46 +1,69 @@
-<%- include('../partials/header', { title: 'Llista d\'Incidències' }) %>
+<%- include('../partials/header', { title: 'Actuacions per Tècnic' }) %>
 
-<h1>Llista d'Incidències</h1>
+<div class="container my-4">
+  <h1 class="mb-4">Registrar Actuacions per Tècnic</h1>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Descripció</th>
-      <th>Departament</th>
-      <th>Prioritat</th>
-      <th>Tècnic</th>
-      <th>Accions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% incidencies.forEach(incidencia => { %>
-      <tr>
-        <form action="/incidencies/<%= incidencia.id %>/update" method="POST">
-          <td><%= incidencia.id %></td>
-          <td><%= incidencia.descripcio %></td>
-          <td><%= incidencia.Departament ? incidencia.Departament.nom : 'Sense departament' %></td>
-          <td>
-            <select name="prioritat" class="form-select">
-              <option value="Baixa" <%= incidencia.prioritat === 'Baixa' ? 'selected' : '' %>>Baixa</option>
-              <option value="Mitjana" <%= incidencia.prioritat === 'Mitjana' ? 'selected' : '' %>>Mitjana</option>
-              <option value="Alta" <%= incidencia.prioritat === 'Alta' ? 'selected' : '' %>>Alta</option>
-            </select>
-          </td>
-          <td>
-            <select name="tecnicId" class="form-select">
-              <% tecnics.forEach(tecnic => { %>
-                <option value="<%= tecnic.id %>" <%= tecnic.id === incidencia.tecnic_id ? 'selected' : '' %>><%= tecnic.nom %></option>
-              <% }) %>
-            </select>
-          </td>
-          <td>
-            <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
-          </td>
-        </form>
-      </tr>
+  <div class="mb-4">
+    <label for="tecnicSelect" class="form-label">Selecciona un tècnic:</label>
+    <select id="tecnicSelect" class="form-select">
+      <option value="">-- Selecciona --</option>
+      <% tecnics.forEach(tecnic => { %>
+        <option value="<%= tecnic.id %>"><%= tecnic.nom %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div id="incidenciesContainer">
+    <% incidencies.forEach(inc => { %>
+      <div class="card mb-3 tecnic-incidencia" data-tecnic-id="<%= inc.tecnic_id %>" style="display: none;">
+        <div class="card-header">
+          <strong>Incidència #<%= inc.id %></strong> - <%= inc.descripcio %>
+        </div>
+        <div class="card-body">
+          <form action="/actuacions/create" method="POST">
+            <input type="hidden" name="incidentid" value="<%= inc.id %>">
+            <input type="hidden" name="tecnic_id" value="<%= inc.tecnic_id %>">
+
+            <div class="mb-3">
+              <label class="form-label">Descripció de l'actuació:</label>
+              <textarea name="descripcio" class="form-control" required></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Data:</label>
+              <input type="date" name="data" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Temps invertit (minuts):</label>
+              <input type="number" name="temps" class="form-control" min="0">
+            </div>
+
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" name="resolta" id="resolta_<%= inc.id %>">
+              <label class="form-check-label" for="resolta_<%= inc.id %>">Resolució completada</label>
+            </div>
+
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" name="visible" id="visible_<%= inc.id %>" checked>
+              <label class="form-check-label" for="visible_<%= inc.id %>">Visible per a usuaris</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Desar Actuació</button>
+          </form>
+        </div>
+      </div>
     <% }) %>
-  </tbody>
-</table>
+  </div>
+</div>
+
+<script>
+  document.getElementById('tecnicSelect').addEventListener('change', function () {
+    const selectedId = this.value;
+    document.querySelectorAll('.tecnic-incidencia').forEach(div => {
+      div.style.display = div.getAttribute('data-tecnic-id') === selectedId ? 'block' : 'none';
+    });
+  });
+</script>
 
 <%- include('../partials/footer') %>

@@ -1,44 +1,50 @@
 <%- include('../partials/header', { title: 'Editar Incidència' }) %>
 
-<h1>Editar Incidència</h1>
+<h1 class="mb-4">Editar Incidència</h1>
 
-<form action="/incidencies/<%= incidencia.id %>/update" method="POST">
-  <div class="form-group mb-3">
-    <label for="descripcio">Descripció:</label>
-    <textarea name="descripcio" id="descripcio" class="form-control"><%= incidencia.descripcio %></textarea>
-  </div>
-
-  <div class="form-group mb-3">
-    <label for="prioritat">Prioritat:</label>
-    <select name="prioritat" id="prioritat" class="form-select">
-      <option value="Baixa" <%= incidencia.prioritat === 'Baixa' ? 'selected' : '' %>>Baixa</option>
-      <option value="Mitjana" <%= incidencia.prioritat === 'Mitjana' ? 'selected' : '' %>>Mitjana</option>
-      <option value="Alta" <%= incidencia.prioritat === 'Alta' ? 'selected' : '' %>>Alta</option>
-    </select>
-  </div>
-
-  <button type="submit" class="btn btn-primary">Guardar</button>
-</form>
-
-<h2>Llista d'Incidències</h2>
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th>ID</th>
       <th>Descripció</th>
       <th>Departament</th>
       <th>Prioritat</th>
+      <th>Tècnic</th>
+      <th>Accions</th>
     </tr>
   </thead>
   <tbody>
-    <% incidencies.forEach(inc => { %>
-      <tr>
-        <td><%= inc.id %></td>
-        <td><%= inc.descripcio %></td>
-        <td><%= inc.Departament ? inc.Departament.nom : 'Sense departament' %></td>
-        <td><%= inc.prioritat %></td>
-      </tr>
-    <% }) %>
+    <tr>
+      <td><%= incidencia.descripcio %></td>
+      <td><%= incidencia.Departament ? incidencia.Departament.nom : 'Sense departament' %></td>
+
+      <!-- PRIORITAT editable -->
+      <td>
+        <form action="/incidencies/<%= incidencia.id %>/update" method="POST">
+          <select name="prioritat" class="form-select form-select-sm">
+            <option value="Baixa" <%= incidencia.prioritat === 'Baixa' ? 'selected' : '' %>>Baixa</option>
+            <option value="Mitjana" <%= incidencia.prioritat === 'Mitjana' ? 'selected' : '' %>>Mitjana</option>
+            <option value="Alta" <%= incidencia.prioritat === 'Alta' ? 'selected' : '' %>>Alta</option>
+          </select>
+      </td>
+
+      <!-- TÈCNIC editable -->
+      <td>
+          <select name="tecnicId" class="form-select form-select-sm">
+            <option value="">-- Sense tècnic --</option>
+            <% tecnics.forEach(tecnic => { %>
+              <option value="<%= tecnic.id %>" <%= incidencia.Tecnic && incidencia.Tecnic.id === tecnic.id ? 'selected' : '' %>>
+                <%= tecnic.nom %>
+              </option>
+            <% }) %>
+          </select>
+      </td>
+
+      <!-- Botó guardar -->
+      <td>
+        <button type="submit" class="btn btn-sm btn-success">Guardar</button>
+        </form>
+      </td>
+    </tr>
   </tbody>
 </table>
 

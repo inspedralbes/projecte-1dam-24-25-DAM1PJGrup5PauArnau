@@ -5,11 +5,12 @@ const Tecnic = require('../models/Tecnic');
 // Llistar tècnics
 router.get('/', async (req, res) => {
   try {
+    // Carrega tots els tècnics amb els atributs necessaris
     const tecnics = await Tecnic.findAll({ attributes: ['id', 'nom', 'especialitat'] });
-    res.render('tecnics/list', { tecnics });
+    res.render('tecnics/list', { tecnics }); // Passa els tècnics a la vista
   } catch (error) {
-    console.error('Error carregant els tècnics:', error.message);
-    res.status(500).send('Error carregant els tècnics');
+    console.error('Error carregant els tècnics:' + error.message);
+    res.status(500).send('Error carregant els tècnics' + error.message);
   }
 });
 
