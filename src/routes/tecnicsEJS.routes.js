@@ -14,6 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+
 // Formulari per afegir un tècnic
 router.get('/new', (req, res) => {
   res.render('tecnics/new');

@@ -93,6 +93,7 @@ app.get('/incidencies/:id/edit', async (req, res) => {
 // Port
 const port = process.env.PORT ||3000;
 
+
 // Sync DB i iniciar servidor
 (async () => {
   try {

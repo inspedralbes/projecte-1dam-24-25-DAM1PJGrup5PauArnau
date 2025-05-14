@@ -12,6 +12,7 @@ router.get('/', async (req, res) => {
     // Carrega tots els tècnics
     const tecnics = await Tecnic.findAll({ attributes: ['id', 'nom'] });
 
+    
     // Carrega totes les incidències amb el tècnic associat
     const incidencies = await Incident.findAll({
       include: [

@@ -126,6 +126,7 @@ router.get('/api/:id', async (req, res) => {
         }
       ]
     });
+    
 
     if (!incidencia) return res.status(404).json({ error: 'Incidència no trobada' });
 

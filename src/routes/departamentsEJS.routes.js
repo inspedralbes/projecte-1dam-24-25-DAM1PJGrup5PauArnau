@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+
 // Formulari nou departament
 router.get('/new', (req, res) => {
   res.render('departaments/new');
