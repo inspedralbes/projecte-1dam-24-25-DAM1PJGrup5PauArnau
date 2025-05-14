@@ -1,5 +1,12 @@
 <%- include('../partials/header', { title: 'Llista d\'Incidències' }) %>
 
+<style>
+  .table-success { background-color: #d4edda !important; }
+  .table-danger { background-color: #f8d7da !important; }
+  .border-success { border-color: #198754 !important; }
+  .border-danger { border-color: #dc3545 !important; }
+</style>
+
 <h1 class="mb-4">Llista d'Incidències</h1>
 <a class="btn btn-primary mb-3" href="/incidencies/new">Afegir Incidencia</a>
 <table class="table table-bordered">
@@ -9,22 +16,31 @@
       <th>Departament</th>
       <th>Prioritat</th>
       <th>Tècnic</th>
+      <th>Estat</th>
       <th>Accions</th>
     </tr>
   </thead>
   <tbody>
-    <% incidencies.forEach(inc => { %>
-      <tr>
+    <% incidencies.forEach(inc => {
+      const ultimaActuacio = inc.Actuacios?.[0];
+      const resolta = ultimaActuacio?.resolta;
+    %>
+      <tr class="<%= resolta ? 'table-success' : 'table-danger' %>">
         <td><%= inc.descripcio %></td>
         <td><%= inc.Departament ? inc.Departament.nom : 'Sense departament' %></td>
         <td><%= inc.prioritat %></td>
         <td><%= inc.Tecnic ? inc.Tecnic.nom : 'Sense tècnic' %></td>
+        <td><%= resolta ? 'Resolta' : 'Pendent' %></td>
         <td class="text-end">
           <a href="/incidencies/<%= inc.id %>/edit" class="btn btn-warning btn-sm">Editar</a>
+          <form action="/incidencies/<%= inc.id %>/delete" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+          </form>
         </td>
       </tr>
     <% }) %>
   </tbody>
+  
 </table>
 
 <%- include('../partials/footer') %>

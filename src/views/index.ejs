@@ -1,59 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ca">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestor Incidències</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestor Incidències</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  <style>
+    .table-success { background-color: #d4edda !important; }
+    .table-danger { background-color: #f8d7da !important; }
+    .border-success { border-color: #198754 !important; }
+    .border-danger { border-color: #dc3545 !important; }
+  </style>
 </head>
+
 <body>
   <%- include('partials/header', { title: 'Catàleg d\'Incidències' }) %>
 
-  <div class="jumbotron">
-    <div class="container">
-      <h1 class="display-4">Catàleg d'Incidències</h1>
-      <p class="lead">Explora les incidències reportades pels diferents departaments.</p>
-    </div>
-  </div>
+  <div class="container my-4">
+    <h1 class="mb-4">Catàleg d'Incidències</h1>
 
-  <div class="container">
-    <!-- Filters -->
-    <div id="filters" class="row mb-4">
-      <div class="col-md-6">
-        <div class="input-group">
-          <input type="text" id="searchInput" class="form-control" placeholder="Cerca per descripció, departament...">
-          <span class="input-group-text"><i class="bi bi-search"></i></span>
-        </div>
+    <% if (typeof createdId !== 'undefined') { %>
+      <div class="alert alert-success">
+        Incidència creada amb ID: <strong><%= createdId %></strong>
       </div>
-      
-      <div class="col-md-6">
-        <select id="departmentFilter" class="form-select">
-          <option value="all">Tots els departaments</option>
+    <% } %>
+
+    <!-- Filtres -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <input type="text" id="searchById" class="form-control" placeholder="Cerca per ID">
+      </div>
+      <div class="col-md-4">
+        <input type="text" id="searchByDesc" class="form-control" placeholder="Cerca per descripció">
+      </div>
+      <div class="col-md-4">
+        <select id="searchByDepartament" class="form-select">
+          <option value="">-- Tots els departaments --</option>
           <% departaments.forEach(dep => { %>
-          <option value="<%= dep.id %>"><%= dep.nom %></option>
+            <option value="<%= dep.nom.toLowerCase() %>"><%= dep.nom %></option>
           <% }) %>
         </select>
       </div>
     </div>
 
-    <!-- Incident Cards -->
+    <!-- Llistat d'incidències -->
     <div class="row">
       <% if (incidencies && incidencies.length > 0) { %>
-        <% incidencies.forEach(inc => { %>
-          <div class="col-md-4 mb-4 incident-card-container" data-department="<%= inc.departmentId %>">
-            <div class="card incident-card h-100" data-incident-id="<%= inc.id %>">
-              <span class="badge bg-danger department-badge">
-                <%= inc.Departament ? inc.Departament.nom : 'Sense departament' %>
-              </span>
+        <% incidencies.forEach(inc => {
+          const ultimaActuacio = inc.Actuacios?.[0];
+          const resolta = ultimaActuacio?.resolta;
+        %>
+          <div class="col-md-4 mb-4 incident-card-container" data-department="<%= inc.Departament?.nom.toLowerCase() %>">
+            <div class="card incident-card border <%= resolta ? 'border-success' : 'border-danger' %>" 
+                 data-incident-id="<%= inc.id %>" 
+                 data-departament="<%= inc.Departament?.nom.toLowerCase() %>">
               <div class="card-body">
-                <h5 class="card-title"><%= inc.descripcio %></h5>
+                <span class="badge bg-<%= resolta ? 'success' : 'danger' %>">
+                  <%= inc.Departament?.nom || 'Sense departament' %>
+                </span>
+                <h5 class="card-title mt-2"><%= inc.descripcio %></h5>
                 <p class="card-text">
-                  <strong>Prioritat:</strong> <small><%= inc.prioritat %></small><br>
-                  <strong>Data de creació:</strong> <small><%= inc.dataCreacio %></small>
+                  <strong>Prioritat:</strong> <%= inc.prioritat %><br>
+                  <strong>Data:</strong> <%= inc.dataCreacio %><br>
+                  <strong>Estat:</strong> 
+                  <span class="badge bg-<%= resolta ? 'success' : 'danger' %>">
+                    <%= resolta ? 'Resolta' : 'Pendent' %>
+                  </span>
                 </p>
               </div>
               <div class="card-footer">
-                <button class="btn btn-sm btn-outline-danger float-end">Detalls</button>
+                <button class="btn btn-sm btn-outline-primary btn-detalls" data-incident-id="<%= inc.id %>">Detalls</button>
               </div>
             </div>
           </div>
@@ -64,20 +80,78 @@
     </div>
   </div>
 
+  <!-- MODAL Detalls -->
+  <div class="modal fade" id="detallsModal" tabindex="-1" aria-labelledby="detallsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Detalls de la Incidència</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tancar"></button>
+        </div>
+        <div class="modal-body" id="detallsContent">
+          <p><em>Carregant...</em></p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Tancar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <%- include('partials/footer') %>
 
-  <!-- Afegir JavaScript per interactivitat -->
-  <script src="/static/js/main.js"></script>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    document.getElementById('departmentFilter').addEventListener('change', function () {
-      const selectedDepartment = this.value;
-      const cards = document.querySelectorAll('.incident-card-container');
+    const idInput = document.getElementById('searchById');
+    const descInput = document.getElementById('searchByDesc');
+    const depSelect = document.getElementById('searchByDepartament');
+    const cards = document.querySelectorAll('.incident-card');
+
+    function filterCards() {
+      const idVal = idInput.value.trim();
+      const descVal = descInput.value.trim().toLowerCase();
+      const depVal = depSelect.value;
 
       cards.forEach(card => {
-        if (selectedDepartment === 'all' || card.dataset.department === selectedDepartment) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
+        const incidentId = card.dataset.incidentId;
+        const descText = card.querySelector('.card-title').innerText.toLowerCase();
+        const depText = card.dataset.departament?.toLowerCase() || '';
+
+        const matchesId = !idVal || incidentId.includes(idVal);
+        const matchesDesc = !descVal || descText.includes(descVal);
+        const matchesDep = !depVal || depText === depVal;
+
+        card.parentElement.style.display = matchesId && matchesDesc && matchesDep ? '' : 'none';
+      });
+    }
+
+    idInput.addEventListener('input', filterCards);
+    descInput.addEventListener('input', filterCards);
+    depSelect.addEventListener('change', filterCards);
+
+    // AJAX per carregar detalls
+    document.querySelectorAll('.btn-detalls').forEach(btn => {
+      btn.addEventListener('click', async function () {
+        const id = this.dataset.incidentId;
+        try {
+          const res = await fetch(`/incidencies/api/${id}`);
+          const data = await res.json();
+
+          const html = `
+            <p><strong>Descripció:</strong> ${data.descripcio}</p>
+            <p><strong>Departament:</strong> ${data.departament}</p>
+            <p><strong>Prioritat:</strong> ${data.prioritat}</p>
+            <p><strong>Resolució:</strong> ${data.resolta ? 'Sí' : 'No'}</p>
+            <p><strong>Visible:</strong> ${data.visible ? 'Sí' : 'No'}</p>
+            ${data.visible && data.descripcioTecnic ? `<p><strong>Actuació Tècnica:</strong> ${data.descripcioTecnic}</p>` : ''}
+          `;
+
+          document.getElementById('detallsContent').innerHTML = html;
+          const modal = new bootstrap.Modal(document.getElementById('detallsModal'));
+          modal.show();
+        } catch (err) {
+          document.getElementById('detallsContent').innerHTML = '<p class="text-danger">Error carregant detalls.</p>';
         }
       });
     });

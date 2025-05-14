@@ -30,7 +30,9 @@ router.get('/', async (req, res) => {
 router.post('/create', async (req, res) => {
   try {
     const { descripcio, data, temps, resolta, visible, tecnic_id, incidentid } = req.body;
-    await Actuacio.create({
+
+    // Crea l’actuació
+    const actuacio = await Actuacio.create({
       descripcio,
       data,
       temps,
@@ -39,6 +41,15 @@ router.post('/create', async (req, res) => {
       tecnic_id,
       incidentid
     });
+
+    // Si l’actuació està marcada com resolta, marca també la incidència
+    if (resolta === 'on') {
+      await Incident.update(
+        { resolta: true },
+        { where: { id: incidentid } }
+      );
+    }
+
     res.redirect('/');
   } catch (err) {
     console.error('Error creant actuació:', err.message);

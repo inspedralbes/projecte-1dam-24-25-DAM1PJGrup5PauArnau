@@ -3,23 +3,25 @@ const router = express.Router();
 const Incident = require('../models/Incidencia');
 const Departament = require('../models/Departament');
 const Tecnic = require('../models/Tecnic');
+const Actuacio = require('../models/Actuacio');
 
 // Llistar incidències
 router.get('/', async (req, res) => {
   try {
-    // Carrega totes les incidències amb el departament i el tècnic associats
+
     const incidencies = await Incident.findAll({
       include: [
         { model: Departament, attributes: ['nom'] },
-        { model: Tecnic, attributes: ['id', 'nom'] },
+        { model: Tecnic, attributes: ['nom'] },
+        { model: Actuacio, include: [{ model: Tecnic, attributes: ['nom'] }]        }
       ],
+      order: [['createdAt', 'DESC']]
     });
 
-    // Carrega tots els tècnics per al desplegable
-    const tecnics = await Tecnic.findAll({ attributes: ['id', 'nom'] });
+    const departaments = await Departament.findAll({ attributes: ['nom'] });
 
-    // Renderitza la vista amb les dades
-    res.render('incidencies/list', { incidencies, tecnics });
+    // Renderitza la vista normal
+    res.render('incidencies/list', { incidencies, createdId: req.query.createdId, departaments });
   } catch (error) {
     console.error('Error carregant les incidències:', error.message);
     res.status(500).send('Error carregant les incidències');
@@ -36,18 +38,20 @@ router.get('/new', async (req, res) => {
 router.post('/create', async (req, res) => {
   try {
     const { descripcio, prioritat, departmentId } = req.body;
-    // Comprova que el departament existeix
+
     const departament = await Departament.findByPk(departmentId);
     if (!departament) {
       return res.status(404).send('Departament no trobat');
     }
-    // Crea la incidència amb el departament associat
-    await Incident.create({
+
+    const novaIncidencia = await Incident.create({
       descripcio,
       prioritat,
-      departamentId: departmentId, // Guarda la ID del departament
+      departamentId: departmentId,
     });
-    res.redirect('/incidencies');
+
+    // Redirigeix a index amb el nou ID
+    res.redirect(`/?createdId=${novaIncidencia.id}`);
   } catch (error) {
     console.error('Error creant la incidència:', error.message);
     res.status(500).send('Error creant la incidència');
@@ -68,8 +72,8 @@ router.get('/:id/edit', async (req, res) => {
 
     res.render('incidencies/edit', { incidencia, tecnics });
   } catch (error) {
-    console.error('Error carregant la incidència:', error.message);
-    res.status(500).send('Error carregant la incidència');
+    console.error('Error carregant la incidència:' + error.message);
+    res.status(500).send('Error carregant la incidència'+error.message);
   }
 });
 
@@ -103,4 +107,43 @@ router.get('/:id/delete', async (req, res) => {
   res.redirect('/incidencies');
 });
 
+// Petita API per obtenir una incidència i les seves actuacions
+// Aquesta API retorna una incidència i les seves actuacions associades
+// amb el tècnic que ha realitzat l'actuació + departament
+// Aquesta API és per a la vista de l'usuari i no per a la vista de l'administrador
+
+router.get('/api/:id', async (req, res) => {
+  try {
+    const incidencia = await Incident.findByPk(req.params.id, {
+      include: [
+        { model: Departament, attributes: ['nom'] },
+        {
+          model: Actuacio,
+          where: { visible: true },
+          required: false, // perquè no falli si no hi ha actuacions visibles
+          include: [{ model: Tecnic, attributes: ['nom'] }],
+          order: [['createdAt', 'ASC']]
+        }
+      ]
+    });
+
+    if (!incidencia) return res.status(404).json({ error: 'Incidència no trobada' });
+
+    res.json({
+      id: incidencia.id,
+      descripcio: incidencia.descripcio,
+      departament: incidencia.Departament?.nom || '—',
+      prioritat: incidencia.prioritat,
+      actuacions: incidencia.Actuacios.map(act => ({
+        id: act.id,
+        descripcio: act.descripcio,
+        data: act.createdAt,
+        nomTecnic: act.Tecnic?.nom || '—'
+      }))
+    });
+  } catch (err) {
+    console.error('Error API:', err);
+    res.status(500).json({ error: 'Error servidor' });
+  }
+});
 module.exports = router;
