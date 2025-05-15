@@ -5,12 +5,13 @@
   .table-danger { background-color: #f8d7da !important; }
   .border-success { border-color: #198754 !important; }
   .border-danger { border-color: #dc3545 !important; }
+</style>
+<style>
+  /* Borders generals */
   .table td, .table th {
     border: 2px solid #2a2b2c !important;
     vertical-align: middle;
   }
-<<<<<<< HEAD
-=======
 
   .btn-danger{
     background-color: rgb(93, 181, 236);
@@ -23,16 +24,15 @@
     color: black;
   }
   /* Fons de capçalera */
->>>>>>> b94fc6d657c657971f5c243857e4c332f4cb3e18
   .table thead th {
     background-color: #343a40;
     color: white;
   }
+
+  /* Solució per mantenir borders amb color en files destacades */
   .table-success td, .table-danger td {
     border: 1px solid #2a2b2c !important;
   }
-<<<<<<< HEAD
-=======
 
   /* Arrodonir cantonades superiors */
   .table thead tr:first-child th:first-child {
@@ -55,23 +55,16 @@
   }
 
   /* Opcional: afegir efecte suau a tot */
->>>>>>> b94fc6d657c657971f5c243857e4c332f4cb3e18
   .table {
     border-collapse: separate;
     border-spacing: 0;
     overflow: hidden;
-<<<<<<< HEAD
-    color:#2a2b2c;
-=======
     color:white;
->>>>>>> b94fc6d657c657971f5c243857e4c332f4cb3e18
   }
 </style>
 
+
 <h1 class="mb-4">Llista d'Incidències</h1>
-<<<<<<< HEAD
-<a class="btn btn-primary mb-3" href="/incidencies/new">Afegir Incidència</a>
-=======
 <a class="btn btn-primary mb-3" href="/incidencies/new">Afegir Incidencia</a>
 
 <% 
@@ -180,59 +173,5 @@ resolvedIncidencies.sort(ordenarPerPrioritat);
    <% }) %>
   </tbody>
 </table>
->>>>>>> b94fc6d657c657971f5c243857e4c332f4cb3e18
-
-<%
-  function getPrioritatWeight(prioritat) {
-    if (prioritat === 'Alta') return 1;
-    if (prioritat === 'Mitjana') return 2;
-    return 3; // Baixa
-  }
-
-  // Classificació
-  const pendentsSenseTecnic = [];
-  const pendentsAmbTecnic = [];
-  const resoltes = [];
-
-  incidencies.forEach(inc => {
-    const actuacionsVisibles = inc.Actuacios?.filter(a => a.visible) || [];
-    const ultimaActuacio = actuacionsVisibles[actuacionsVisibles.length - 1];
-    const resolta = !!ultimaActuacio?.resolta;
-
-    inc._resolta = resolta;
-
-    if (resolta) {
-      resoltes.push(inc);
-    } else if (!inc.Tecnic) {
-      pendentsSenseTecnic.push(inc);
-    } else {
-      pendentsAmbTecnic.push(inc);
-    }
-  });
-
-  // Ordenació
-  const ordenar = llista => llista.sort((a, b) => {
-    const p1 = getPrioritatWeight(a.prioritat);
-    const p2 = getPrioritatWeight(b.prioritat);
-    if (p1 !== p2) return p1 - p2;
-    return a.id - b.id;
-  });
-
-  ordenar(pendentsSenseTecnic);
-  ordenar(pendentsAmbTecnic);
-  ordenar(resoltes);
-%>
-
-<!-- TAULA 1: Pendents sense tècnic -->
-<h2>Incidències pendents (Sense tècnic)</h2>
-<%- include('partials/incidencia_table', { llista: pendentsSenseTecnic }) %>
-
-<!-- TAULA 2: Pendents amb tècnic -->
-<h2>Incidències pendents (Amb tècnic)</h2>
-<%- include('partials/incidencia_table', { llista: pendentsAmbTecnic }) %>
-
-<!-- TAULA 3: Resoltes -->
-<h2>Incidències resoltes</h2>
-<%- include('partials/incidencia_table', { llista: resoltes }) %>
 
 <%- include('../partials/footer') %>
