@@ -2,7 +2,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
-const Actuacio = sequelize.define('Actuacio', {
+const Actuacio = sequelize.define('Actuacion', {
   descripcio: {
     type: DataTypes.TEXT,
     allowNull: true,

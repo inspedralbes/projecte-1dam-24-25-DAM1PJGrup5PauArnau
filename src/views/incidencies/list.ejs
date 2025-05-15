@@ -5,98 +5,79 @@
   .table-danger { background-color: #f8d7da !important; }
   .border-success { border-color: #198754 !important; }
   .border-danger { border-color: #dc3545 !important; }
-</style>
-<style>
-  /* Borders generals */
   .table td, .table th {
     border: 2px solid #2a2b2c !important;
     vertical-align: middle;
   }
-
-  /* Fons de capçalera */
   .table thead th {
     background-color: #343a40;
     color: white;
   }
-
-  /* Solució per mantenir borders amb color en files destacades */
   .table-success td, .table-danger td {
     border: 1px solid #2a2b2c !important;
   }
-
-  /* Arrodonir cantonades superiors */
-  .table thead tr:first-child th:first-child {
-    border-top-left-radius: 0.5rem;
-  }
-
-  .table thead tr:first-child th:last-child {
-    border-top-right-radius: 0.5rem;
-  }
-
-  /* Arrodonir cantonades inferiors */
-  .table tbody tr:last-child td:first-child {
-    border-bottom-left-radius: 1rem;
-    color:#2a2b2c
-  }
-
-  .table tbody tr:last-child td:last-child {
-    border-bottom-right-radius: 1rem;
-    color:#2a2b2c;
-  }
-
-  /* Opcional: afegir efecte suau a tot */
   .table {
     border-collapse: separate;
     border-spacing: 0;
     overflow: hidden;
-    color:#2a2b2c
+    color:#2a2b2c;
   }
 </style>
 
-
 <h1 class="mb-4">Llista d'Incidències</h1>
-<a class="btn btn-primary mb-3" href="/incidencies/new">Afegir Incidencia</a>
-<table class="table table-bordered" table-striped align="middle">
-  <thead class="table-dark text-center">
-    <tr>
-      <th>Descripció</th>
-      <th>Departament</th>
-      <th>Prioritat</th>
-      <th>Tècnic</th>
-      <th>Estat</th>
-      <th>Accions</th>
-    </tr>
-  </thead>
-  <tbody class="text-center">
-   <% incidencies.forEach(inc => {
-     const actuacionsVisibles = inc.Actuacios?.filter(a => a.visible) || [];
-     const ultimaActuacio = actuacionsVisibles[actuacionsVisibles.length - 1];
-     const resolta = !!ultimaActuacio?.resolta;
-   %>
-     <tr>
-       <td>
-         <%= inc.descripcio %>
-       </td>
-       <td><%= inc.Departament ? inc.Departament.nom : 'Sense departament' %></td>
-       <td><%= inc.prioritat %></td>
-       <td><%= inc.Tecnic ? inc.Tecnic.nom : 'Sense tècnic' %></td>
-       <td class="<%= resolta ? 'table-success' : 'table-danger' %>">
-         <%= resolta ? 'Resolta' : 'Pendent' %>
-         <% if (resolta) { %>
-           <span class="text-success ms-1" title="Incidència resolta">&#10003;</span>
-         <% } else { %>
-          <span class="text-danger ms-1" title="Incidència pendent">&#10007;</span>
-          <% } %>
-        </td>
-        <td class="text-end">
-        <a href="/incidencies/<%= inc.id %>/edit" class="btn btn-warning btn-sm">Editar</a>
-         <form action="/incidencies/<%= inc.id %>/delete" method="POST" style="display:inline;">
-            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-          </form>
-        </td>
-      </tr>
-    <% }) %>
-  </tbody>
-</table>
+<a class="btn btn-primary mb-3" href="/incidencies/new">Afegir Incidència</a>
+
+<%
+  function getPrioritatWeight(prioritat) {
+    if (prioritat === 'Alta') return 1;
+    if (prioritat === 'Mitjana') return 2;
+    return 3; // Baixa
+  }
+
+  // Classificació
+  const pendentsSenseTecnic = [];
+  const pendentsAmbTecnic = [];
+  const resoltes = [];
+
+  incidencies.forEach(inc => {
+    const actuacionsVisibles = inc.Actuacios?.filter(a => a.visible) || [];
+    const ultimaActuacio = actuacionsVisibles[actuacionsVisibles.length - 1];
+    const resolta = !!ultimaActuacio?.resolta;
+
+    inc._resolta = resolta;
+
+    if (resolta) {
+      resoltes.push(inc);
+    } else if (!inc.Tecnic) {
+      pendentsSenseTecnic.push(inc);
+    } else {
+      pendentsAmbTecnic.push(inc);
+    }
+  });
+
+  // Ordenació
+  const ordenar = llista => llista.sort((a, b) => {
+    const p1 = getPrioritatWeight(a.prioritat);
+    const p2 = getPrioritatWeight(b.prioritat);
+    if (p1 !== p2) return p1 - p2;
+    return a.id - b.id;
+  });
+
+  ordenar(pendentsSenseTecnic);
+  ordenar(pendentsAmbTecnic);
+  ordenar(resoltes);
+%>
+
+<!-- TAULA 1: Pendents sense tècnic -->
+<h2>Incidències pendents (Sense tècnic)</h2>
+<%- include('partials/incidencia_table', { llista: pendentsSenseTecnic }) %>
+
+<!-- TAULA 2: Pendents amb tècnic -->
+<h2>Incidències pendents (Amb tècnic)</h2>
+<%- include('partials/incidencia_table', { llista: pendentsAmbTecnic }) %>
+
+<!-- TAULA 3: Resoltes -->
+<h2>Incidències resoltes</h2>
+<%- include('partials/incidencia_table', { llista: resoltes }) %>
 
 <%- include('../partials/footer') %>
