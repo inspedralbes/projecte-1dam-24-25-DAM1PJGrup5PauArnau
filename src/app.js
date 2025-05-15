@@ -49,16 +49,43 @@ const tecnicsRoutes = require('./routes/tecnicsEJS.routes');
 app.get('/', async (req, res) => {
   try {
     const incidencies = await Incident.findAll({
-      include: [{ model: Departament, attributes: ['nom'] }], // Inclou el departament associat
+      include: [
+        { model: Departament, attributes: ['nom'] },
+        { 
+          model: Actuacio,
+          include: [{ model: Tecnic, attributes: ['nom'] }],
+          order: [['createdAt', 'DESC']]
+        }
+      ],
+      order: [['createdAt', 'DESC']]
     });
-    const departaments = await Departament.findAll({ attributes: ['id', 'nom'] }); // Carrega els departaments
-    res.render('index', { incidencies, departaments }); // Passa les incidències a la vista
+
+    const departaments = await Departament.findAll({ attributes: ['id', 'nom'] });
+
+    res.render('index', { incidencies, departaments });
   } catch (error) {
     console.error('Error carregant les incidències:', error.message);
     res.status(500).send('Error carregant les incidències');
   }
 });
 
+// Relacions
+
+// Incidència i Accions
+Incident.hasMany(Actuacio, { foreignKey: 'incidentid', onDelete: 'CASCADE' });
+Actuacio.belongsTo(Incident, { foreignKey: 'incidentid' });
+
+// Tecnic i Incidència (assignació)
+Tecnic.hasMany(Incident, { foreignKey: 'tecnic_id', onDelete: 'CASCADE' });
+Incident.belongsTo(Tecnic, { foreignKey: 'tecnic_id', onDelete: 'CASCADE' });
+
+// Tecnic i Accions
+Tecnic.hasMany(Actuacio, { foreignKey: 'tecnic_id' });
+Actuacio.belongsTo(Tecnic, { foreignKey: 'tecnic_id' });
+
+// Incident i Departament
+Incident.belongsTo(Departament, { foreignKey: 'departamentId',  onDelete: 'CASCADE' });
+Departament.hasMany(Incident, { foreignKey: 'departamentId', onDelete: 'CASCADE' });
 
 // Altres rutes...
 app.use('/admin', adminRoutes);
@@ -93,11 +120,10 @@ app.get('/incidencies/:id/edit', async (req, res) => {
 // Port
 const port = process.env.PORT ||3000;
 
-
 // Sync DB i iniciar servidor
 (async () => {
   try {
-    await sequelize.sync({ alter: true }); // Força la sincronització de la base de dades
+    await sequelize.sync({ alter: false }); // Força la sincronització de la base de dades
     console.log('📦 Taules creades correctament');
 
     //  const inc1 = Incident.create({nom:"JOAN"}); 

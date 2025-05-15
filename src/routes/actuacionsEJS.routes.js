@@ -28,35 +28,28 @@ router.get('/', async (req, res) => {
 });
 
 // Ruta per actualitzar una actuació
+// actuacions.routes.js o similar
 router.post('/create', async (req, res) => {
-  try {
-    const { descripcio, data, temps, resolta, visible, tecnic_id, incidentid } = req.body;
+  const { incidentid, tecnic_id, descripcio, data, temps, resolta, visible } = req.body;
 
-    // Crea l’actuació
-    const actuacio = await Actuacio.create({
-      descripcio,
-      data,
-      temps,
+  try {
+    await Actuacio.create({
+      incidentid: incidentid, // <-- Assegura't que el model té aquest nom de camp!
+      tecnic_id: tecnic_id,
+      descripcio: descripcio,
+      data: data,
+      temps: temps, // <-- igual que al model
       resolta: resolta === 'on',
-      visible: visible === 'on',
-      tecnic_id,
-      incidentid
+      visible: visible === 'on'
     });
 
-    // Si l’actuació està marcada com resolta, marca també la incidència
-    if (resolta === 'on') {
-      await Incident.update(
-        { resolta: true },
-        { where: { id: incidentid } }
-      );
-    }
-
     res.redirect('/');
-  } catch (err) {
-    console.error('Error creant actuació:', err.message);
-    res.status(500).send("Error creant actuació: " + err.message);
+  } catch (error) {
+    console.error('Error creant actuació:', error);
+    res.status(500).send('Error al crear l\'actuació');
   }
 });
+
 
 
 module.exports = router;

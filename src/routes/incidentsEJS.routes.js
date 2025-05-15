@@ -100,7 +100,7 @@ router.post('/:id/update', async (req, res) => {
 });
 
 // Eliminar incidència
-router.get('/:id/delete', async (req, res) => {
+router.post('/:id/delete', async (req, res) => {
   const incidencies = await Incident.findByPk(req.params.id);
   if (!incidencies) return res.status(404).send('Incidència no trobada');
   await incidencies.destroy();
@@ -111,7 +111,6 @@ router.get('/:id/delete', async (req, res) => {
 // Aquesta API retorna una incidència i les seves actuacions associades
 // amb el tècnic que ha realitzat l'actuació + departament
 // Aquesta API és per a la vista de l'usuari i no per a la vista de l'administrador
-
 router.get('/api/:id', async (req, res) => {
   try {
     const incidencia = await Incident.findByPk(req.params.id, {
@@ -119,31 +118,33 @@ router.get('/api/:id', async (req, res) => {
         { model: Departament, attributes: ['nom'] },
         {
           model: Actuacio,
+          required: false,
           where: { visible: true },
-          required: false, // perquè no falli si no hi ha actuacions visibles
           include: [{ model: Tecnic, attributes: ['nom'] }],
-          order: [['createdAt', 'ASC']]
+          order: [['createdAt', 'DESC']]
         }
       ]
     });
-    
 
     if (!incidencia) return res.status(404).json({ error: 'Incidència no trobada' });
+
+    // Agafa l'última actuació visible
+    const actuacionsVisibles = incidencia.Actuacios || [];
+    const ultimaActuacio = actuacionsVisibles[actuacionsVisibles.length - 1];
 
     res.json({
       id: incidencia.id,
       descripcio: incidencia.descripcio,
       departament: incidencia.Departament?.nom || '—',
       prioritat: incidencia.prioritat,
-      actuacions: incidencia.Actuacios.map(act => ({
-        id: act.id,
-        descripcio: act.descripcio,
-        data: act.createdAt,
-        nomTecnic: act.Tecnic?.nom || '—'
-      }))
+      resolta: !!ultimaActuacio?.resolta,
+      visible: !!ultimaActuacio,
+      descripcioTecnic: ultimaActuacio?.descripcio || '',
+      dataTecnic: ultimaActuacio?.data || '',
+      nomTecnic: ultimaActuacio?.Tecnic?.nom || '',
+      // Si vols, pots afegir més camps aquí
     });
   } catch (err) {
-    console.error('Error API:', err);
     res.status(500).json({ error: 'Error servidor' });
   }
 });

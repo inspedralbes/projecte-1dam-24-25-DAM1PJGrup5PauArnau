@@ -25,61 +25,64 @@
       </div>
     <% } %>
 
-    <!-- Filtres -->
-    <div class="row mb-3">
+    <div class="row mb-4">
       <div class="col-md-4">
-        <input type="text" id="searchById" class="form-control" placeholder="Cerca per ID">
+      <input id="searchById" type="text" class="form-control" placeholder="Cercar per ID">
       </div>
-      <div class="col-md-4">
-        <input type="text" id="searchByDesc" class="form-control" placeholder="Cerca per descripció">
-      </div>
-      <div class="col-md-4">
-        <select id="searchByDepartament" class="form-select">
-          <option value="">-- Tots els departaments --</option>
-          <% departaments.forEach(dep => { %>
-            <option value="<%= dep.nom.toLowerCase() %>"><%= dep.nom %></option>
-          <% }) %>
-        </select>
-      </div>
+    <div class="col-md-4">
+      <input id="searchByDesc" type="text" class="form-control" placeholder="Cercar per descripció">
     </div>
-
-    <!-- Llistat d'incidències -->
-    <div class="row">
-      <% if (incidencies && incidencies.length > 0) { %>
-        <% incidencies.forEach(inc => {
-          const ultimaActuacio = inc.Actuacios?.[0];
-          const resolta = ultimaActuacio?.resolta;
-        %>
-          <div class="col-md-4 mb-4 incident-card-container" data-department="<%= inc.Departament?.nom.toLowerCase() %>">
-            <div class="card incident-card border <%= resolta ? 'border-success' : 'border-danger' %>" 
-                 data-incident-id="<%= inc.id %>" 
-                 data-departament="<%= inc.Departament?.nom.toLowerCase() %>">
-              <div class="card-body">
-                <span class="badge bg-<%= resolta ? 'success' : 'danger' %>">
-                  <%= inc.Departament?.nom || 'Sense departament' %>
-                </span>
-                <h5 class="card-title mt-2"><%= inc.descripcio %></h5>
-                <p class="card-text">
-                  <strong>Prioritat:</strong> <%= inc.prioritat %><br>
-                  <strong>Data:</strong> <%= inc.dataCreacio %><br>
-                  <strong>Estat:</strong> 
-                  <span class="badge bg-<%= resolta ? 'success' : 'danger' %>">
-                    <%= resolta ? 'Resolta' : 'Pendent' %>
-                  </span>
-                </p>
-              </div>
-              <div class="card-footer">
-                <button class="btn btn-sm btn-outline-primary btn-detalls" data-incident-id="<%= inc.id %>">Detalls</button>
-              </div>
-            </div>
-          </div>
+    <div class="col-md-4">
+      <select id="searchByDepartament" class="form-select">
+        <option value="">Tots els departaments</option>
+        <% const departamentsUnics = [...new Set(incidencies.map(i => i.Departament?.nom).filter(Boolean))]; %>
+        <% departamentsUnics.forEach(dep => { %>
+          <option value="<%= dep.toLowerCase() %>"><%= dep %></option>
         <% }) %>
-      <% } else { %>
-        <p class="text-muted">No hi ha incidències disponibles.</p>
-      <% } %>
+      </select>
     </div>
   </div>
 
+    <!-- Filtres -->
+  <div class="row">
+    <% if (incidencies && incidencies.length > 0) { %>
+      <% incidencies.forEach(inc => {
+        const actuacionsVisibles = inc.Actuacios?.filter(a => a.visible) || [];
+        const ultimaActuacio = actuacionsVisibles[actuacionsVisibles.length - 1];
+        const resolta = !!ultimaActuacio?.resolta;
+        const teActuacioVisible = actuacionsVisibles.length > 0;
+      %>
+      <div class="col-md-4 mb-4 incident-card-container" data-department="<%= inc.Departament?.nom.toLowerCase() %>">
+        <div class="card incident-card border <%= resolta ? 'border-success' : 'border-danger' %>" data-incident-id="<%= inc.id %>">
+          <div class="card-body">
+            <span class="badge bg-<%= resolta ? 'success' : 'danger' %>">
+              <%= inc.Departament?.nom || 'Sense departament' %>
+            </span>
+            <h5 class="card-title mt-2">
+              <%= inc.descripcio %>
+              <% if (resolta) { %>
+                <span class="text-success ms-2" title="Incidència resolta">&#10003;</span>
+              <% } %>
+            </h5>
+            <p class="card-text">
+              <strong>Prioritat:</strong> <%= inc.prioritat %><br>
+              <strong>Data:</strong> <%= inc.dataCreacio %><br>
+              <strong>Estat:</strong>
+              <span class="badge px-3 py-2 fs-6 bg-<%= resolta ? 'success' : 'danger' %>">
+                <%= resolta ? 'Resolta' : 'Pendent' %>
+              </span>
+                <% if (teActuacioVisible && ultimaActuacio.visible) { %>
+                  <button class="btn btn-sm btn-outline-primary btn-detalls" data-incident-id="<%= inc.id %>">Detalls</button>
+                <% } %>
+            </p>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    <% } else { %>
+      <p class="text-muted">No hi ha incidències disponibles.</p>
+    <% } %>
+  </div>
   <!-- MODAL Detalls -->
   <div class="modal fade" id="detallsModal" tabindex="-1" aria-labelledby="detallsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -102,59 +105,76 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
     const idInput = document.getElementById('searchById');
     const descInput = document.getElementById('searchByDesc');
     const depSelect = document.getElementById('searchByDepartament');
-    const cards = document.querySelectorAll('.incident-card');
+    const cardContainers = document.querySelectorAll('.incident-card-container');
 
     function filterCards() {
-      const idVal = idInput.value.trim();
-      const descVal = descInput.value.trim().toLowerCase();
-      const depVal = depSelect.value;
+      const idVal = idInput?.value.trim().toLowerCase();
+      const descVal = descInput?.value.trim().toLowerCase();
+      const depVal = depSelect?.value;
 
-      cards.forEach(card => {
-        const incidentId = card.dataset.incidentId;
-        const descText = card.querySelector('.card-title').innerText.toLowerCase();
-        const depText = card.dataset.departament?.toLowerCase() || '';
+      cardContainers.forEach(container => {
+        const card = container.querySelector('.incident-card');
+        const incidentId = card?.dataset.incidentId?.toLowerCase();
+        const descText = card?.querySelector('.card-title')?.innerText.toLowerCase() || '';
+        const depText = container.dataset.department?.toLowerCase() || '';
 
         const matchesId = !idVal || incidentId.includes(idVal);
         const matchesDesc = !descVal || descText.includes(descVal);
         const matchesDep = !depVal || depText === depVal;
 
-        card.parentElement.style.display = matchesId && matchesDesc && matchesDep ? '' : 'none';
+        container.style.display = matchesId && matchesDesc && matchesDep ? '' : 'none';
       });
     }
 
-    idInput.addEventListener('input', filterCards);
-    descInput.addEventListener('input', filterCards);
-    depSelect.addEventListener('change', filterCards);
+    idInput?.addEventListener('input', filterCards);
+    descInput?.addEventListener('input', filterCards);
+    depSelect?.addEventListener('change', filterCards);
 
     // AJAX per carregar detalls
     document.querySelectorAll('.btn-detalls').forEach(btn => {
       btn.addEventListener('click', async function () {
         const id = this.dataset.incidentId;
+
         try {
           const res = await fetch(`/incidencies/api/${id}`);
           const data = await res.json();
 
-          const html = `
+          let html = `
             <p><strong>Descripció:</strong> ${data.descripcio}</p>
             <p><strong>Departament:</strong> ${data.departament}</p>
             <p><strong>Prioritat:</strong> ${data.prioritat}</p>
             <p><strong>Resolució:</strong> ${data.resolta ? 'Sí' : 'No'}</p>
             <p><strong>Visible:</strong> ${data.visible ? 'Sí' : 'No'}</p>
-            ${data.visible && data.descripcioTecnic ? `<p><strong>Actuació Tècnica:</strong> ${data.descripcioTecnic}</p>` : ''}
           `;
+
+          if (data.visible) {
+            html += `
+              <p><strong>Última actuació visible:</strong> ${data.descripcioTecnic}</p>
+              <p><em>
+                ${data.dataTecnic ? 'Data: ' + data.dataTecnic + '<br>' : ''}
+                ${data.nomTecnic ? 'Tècnic: ' + data.nomTecnic : ''}
+              </em></p>
+            `;
+          } else {
+            html += `<p class="text-muted">No hi ha cap actuació visible per a usuaris.</p>`;
+          }
 
           document.getElementById('detallsContent').innerHTML = html;
           const modal = new bootstrap.Modal(document.getElementById('detallsModal'));
           modal.show();
         } catch (err) {
+          console.error('Error carregant detalls:', err);
           document.getElementById('detallsContent').innerHTML = '<p class="text-danger">Error carregant detalls.</p>';
         }
       });
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>

@@ -1,8 +1,8 @@
-// src/models/Action.js
+// src/models/Actuacio.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
-const Action = sequelize.define('Action', {
+const Actuacio = sequelize.define('Actuacio', {
   descripcio: {
     type: DataTypes.TEXT,
     allowNull: true,
@@ -26,4 +26,4 @@ const Action = sequelize.define('Action', {
 });
 
 
-module.exports = Action;
+module.exports = Actuacio;
