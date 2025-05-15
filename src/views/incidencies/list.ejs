@@ -13,6 +13,16 @@
     vertical-align: middle;
   }
 
+  .btn-danger{
+    background-color: rgb(93, 181, 236);
+    border-color: rgb(93, 181, 236);
+    color: black;
+  }
+  .btn-warning{
+    background-color: rgb(255, 217, 65);
+    border-color: rgb(255, 217, 65);
+    color: black;
+  }
   /* Fons de capçalera */
   .table thead th {
     background-color: #343a40;
@@ -36,7 +46,7 @@
   /* Arrodonir cantonades inferiors */
   .table tbody tr:last-child td:first-child {
     border-bottom-left-radius: 1rem;
-    color:#2a2b2c
+    color:white
   }
 
   .table tbody tr:last-child td:last-child {
@@ -49,13 +59,53 @@
     border-collapse: separate;
     border-spacing: 0;
     overflow: hidden;
-    color:#2a2b2c
+    color:white;
   }
 </style>
 
 
 <h1 class="mb-4">Llista d'Incidències</h1>
 <a class="btn btn-primary mb-3" href="/incidencies/new">Afegir Incidencia</a>
+
+<% 
+// Funció millorada per ordenar per prioritat i tècnic
+const ordenarPerPrioritat = (a, b) => {
+  const priorityOrder = {Alta: 3, Mitjana: 2, Baixa: 1};
+  const aPriority = priorityOrder[a.prioritat] || 0;
+  const bPriority = priorityOrder[b.prioritat] || 0;
+
+  if (aPriority !== bPriority) {
+    return bPriority - aPriority; // Prioritat més alta primer
+  }
+
+  // Mateixa prioritat: ordenar per tècnic (sense tècnic primer)
+  const aTeTecnic = a.Tecnic ? 1 : 0;
+  const bTeTecnic = b.Tecnic ? 1 : 0;
+  return aTeTecnic - bTeTecnic;
+};
+
+// Separar i ordenar incidències amb la nova funció
+const unresolvedIncidencies = [];
+const resolvedIncidencies = [];
+
+incidencies.forEach(inc => {
+  const actuacionsVisibles = inc.Actuacios?.filter(a => a.visible) || [];
+  const ultimaActuacio = actuacionsVisibles[actuacionsVisibles.length - 1];
+  const resolta = !!ultimaActuacio?.resolta;
+  
+  if (resolta) {
+    resolvedIncidencies.push(inc);
+  } else {
+    unresolvedIncidencies.push(inc);
+  }
+});
+
+unresolvedIncidencies.sort(ordenarPerPrioritat);
+resolvedIncidencies.sort(ordenarPerPrioritat);
+%>
+
+<!-- Taula d'Incidències Pendents -->
+<h2 class="mt-5 mb-3 text-danger">Incidències Pendents</h2>
 <table class="table table-bordered" table-striped align="middle">
   <thead class="table-dark text-center">
     <tr>
@@ -68,34 +118,59 @@
     </tr>
   </thead>
   <tbody class="text-center">
-   <% incidencies.forEach(inc => {
-     const actuacionsVisibles = inc.Actuacios?.filter(a => a.visible) || [];
-     const ultimaActuacio = actuacionsVisibles[actuacionsVisibles.length - 1];
-     const resolta = !!ultimaActuacio?.resolta;
-   %>
-     <tr>
-       <td>
-         <%= inc.descripcio %>
-       </td>
+   <% unresolvedIncidencies.forEach(inc => { %>
+     <tr class="table-danger">
+       <td><%= inc.descripcio %></td>
        <td><%= inc.Departament ? inc.Departament.nom : 'Sense departament' %></td>
        <td><%= inc.prioritat %></td>
        <td><%= inc.Tecnic ? inc.Tecnic.nom : 'Sense tècnic' %></td>
-       <td class="<%= resolta ? 'table-success' : 'table-danger' %>">
-         <%= resolta ? 'Resolta' : 'Pendent' %>
-         <% if (resolta) { %>
-           <span class="text-success ms-1" title="Incidència resolta">&#10003;</span>
-         <% } else { %>
-          <span class="text-danger ms-1" title="Incidència pendent">&#10007;</span>
-          <% } %>
-        </td>
-        <td class="text-end">
-        <a href="/incidencies/<%= inc.id %>/edit" class="btn btn-warning btn-sm">Editar</a>
+       <td>
+         Pendent
+         <span class="text-danger ms-1" title="Incidència pendent">&#10007;</span>
+       </td>
+       <td class="text-end">
+         <a href="/incidencies/<%= inc.id %>/edit" class="btn btn-warning btn-sm">Editar</a>
          <form action="/incidencies/<%= inc.id %>/delete" method="POST" style="display:inline;">
-            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-          </form>
-        </td>
-      </tr>
-    <% }) %>
+           <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+         </form>
+       </td>
+     </tr>
+   <% }) %>
+  </tbody>
+</table>
+
+<!-- Taula d'Incidències Resoltes -->
+<h2 class="mt-5 mb-3 text-success">Incidències Resoltes</h2>
+<table class="table table-bordered" table-striped align="middle">
+  <thead class="table-dark text-center">
+    <tr>
+      <th>Descripció</th>
+      <th>Departament</th>
+      <th>Prioritat</th>
+      <th>Tècnic</th>
+      <th>Estat</th>
+      <th>Accions</th>
+    </tr>
+  </thead>
+  <tbody class="text-center">
+   <% resolvedIncidencies.forEach(inc => { %>
+     <tr class="table-success">
+       <td><%= inc.descripcio %></td>
+       <td><%= inc.Departament ? inc.Departament.nom : 'Sense departament' %></td>
+       <td><%= inc.prioritat %></td>
+       <td><%= inc.Tecnic ? inc.Tecnic.nom : 'Sense tècnic' %></td>
+       <td>
+         Resolta
+         <span class="text-success ms-1" title="Incidència resolta">&#10003;</span>
+       </td>
+       <td class="text-end">
+         <a href="/incidencies/<%= inc.id %>/edit" class="btn btn-warning btn-sm">Editar</a>
+         <form action="/incidencies/<%= inc.id %>/delete" method="POST" style="display:inline;">
+           <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+         </form>
+       </td>
+     </tr>
+   <% }) %>
   </tbody>
 </table>
 
