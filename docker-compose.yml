@@ -10,6 +10,7 @@ services:
       - "3000:3000"
     depends_on:
       - db
+      - mongo   
 
   db:
     image: mysql:5.7
@@ -22,10 +23,21 @@ services:
     ports:
       - "3306:3306"
 
+  mongo:
+    image: mongo:5.0
+    container_name: incidencias-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
   adminer:
     image: adminer
     container_name: incidencias-adminer
     depends_on:
-    - db
+      - db
     ports:
-    - "8080:8080" 
+      - "8080:8080" 
+
+volumes:
+  mongo-data:
