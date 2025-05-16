@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Log = require('../models/Log');
 
 // Ruta per al dashboard
 router.get('/', async (req, res) => {
@@ -10,6 +11,5 @@ router.get('/', async (req, res) => {
     res.status(500).send('Error carregant el dashboard');
   }
 });
-
 
 module.exports = router;
