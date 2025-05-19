@@ -5,15 +5,6 @@ const session = require('express-session');
 const sequelize = require('./db');
 const mongoose = require('mongoose');
 
-
-// Connexió a MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('✅ Connexió a MongoDB correcta'))
-.catch((err) => console.error('❌ Error connectant a MongoDB:', err));
-
 // Models
 const Departament = require('./models/Departament');
 const Incident = require('./models/Incidencia');
@@ -71,9 +62,6 @@ app.use('/incidencies', incidentRoutesEJS);
 app.use('/departaments', departamentsRoutes);
 app.use('/actuacions', actionsRoutes);
 app.use('/tecnics', tecnicsRoutes);
-
-// Cron job
-require('./cron/recalificacio');
 
 // Ruta principal
 app.get('/', async (req, res) => {
@@ -138,3 +126,48 @@ const port = process.env.PORT || 3000;
     console.error("❌ Error inicialitzant l'aplicació:", error);
   }
 })();
+
+const { MongoClient, ServerApiVersion } = require('mongodb');
+
+const uri = process.env.MONGO_URI; 
+
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+async function run() {
+  try {
+    await client.connect();
+    await client.db("admin").command({ ping: 1 });
+    console.log("✅ Connexió amb MongoDB Atlas establerta!");
+  } finally {
+    await client.close();
+  }
+}
+
+run().catch(console.error);
+
+const logMiddleware = require('./middlewares/logMiddleware');
+const logRoutes = require('./routes/logs')
+app.use('/admin', logRoutes);
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+app.use(express.static('public'));
+app.use(logMiddleware);
+
+app.get('/', (req, res) => {
+  res.send(`<h1>Inici</h1><a href="/logs">Veure Logs</a>`);
+});
+
+app.use(logRoutes);
+
+// 🔌 Connexió MongoDB amb Mongoose
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('✅ Connectat a MongoDB Atlas!'))
+  .catch(err => console.error('❌ Error connectant a MongoDB:', err));

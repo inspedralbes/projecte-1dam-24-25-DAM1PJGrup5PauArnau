@@ -19,19 +19,7 @@
           <li class="nav-item"><a class="nav-link" href="/incidencies/new">Incidencia</a></li>
           <li class="nav-item"><a class="nav-link" href="/actuacions">Tecnic</a></li>
           <li class="nav-item"><a class="nav-link" href="/admin">admin</a></li>
-          <li></li>
         </ul>
-      <% if (user) { %>
-        <div class="user-info">
-          👤 Sessió iniciada com: <strong><%= user.nom %></strong> (<%= user.rol %>)
-          | <a href="/logout">Tancar sessió</a>
-        </div>
-      <% } else { %>
-        <div class="user-info">
-          <a href="/login">Iniciar sessió</a>
-        </div>
-      <% } %>
       </div>
-    </div>
   </nav>
   <div class="container">

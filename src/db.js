@@ -15,28 +15,3 @@ sequelize.authenticate()
   .then(() => console.log('✅ Connexió amb la base de dades establerta correctament.'))
   .catch((error) => console.error('❌ Error connectant amb la base de dades:', error));
 module.exports = sequelize;
-
-
-const { MongoClient, ServerApiVersion } = require('mongodb');
-
-const uri = process.env.MONGO_URI; 
-
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-
-async function run() {
-  try {
-    await client.connect();
-    await client.db("admin").command({ ping: 1 });
-    console.log("✅ Connexió amb MongoDB Atlas establerta!");
-  } finally {
-    await client.close();
-  }
-}
-
-run().catch(console.error);
