@@ -1,9 +1,57 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 OPR/118.0.0.0" version="27.0.6">
   <diagram name="Página-1" id="XMoajxOhDNza8CLt1PXp">
-    <mxGraphModel>
+    <mxGraphModel dx="1154" dy="508" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="7M6_GuKzb6jUab7vXGH8-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="7M6_GuKzb6jUab7vXGH8-1" target="7M6_GuKzb6jUab7vXGH8-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7M6_GuKzb6jUab7vXGH8-1" value="Docker" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="725" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7M6_GuKzb6jUab7vXGH8-2" value="Base de Dades&lt;br&gt;&lt;div&gt;(MongoDB,Sequelize)&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="585" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7M6_GuKzb6jUab7vXGH8-3" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="7M6_GuKzb6jUab7vXGH8-1" target="7M6_GuKzb6jUab7vXGH8-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="775" as="sourcePoint" />
+            <mxPoint x="430" y="725" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="520" y="755" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7M6_GuKzb6jUab7vXGH8-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="7M6_GuKzb6jUab7vXGH8-4" target="7M6_GuKzb6jUab7vXGH8-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7M6_GuKzb6jUab7vXGH8-4" value="Vistes de les opcions&lt;div&gt;(.ejs)&lt;/div&gt;&lt;div&gt;(actuacions,admin,etc)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="595" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7M6_GuKzb6jUab7vXGH8-6" value="Client&lt;div&gt;(Navegador Web)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="460" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7M6_GuKzb6jUab7vXGH8-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="7M6_GuKzb6jUab7vXGH8-7" target="7M6_GuKzb6jUab7vXGH8-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7M6_GuKzb6jUab7vXGH8-7" value="Servidor en Node.js&lt;div&gt;a través del app.js&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="450" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7M6_GuKzb6jUab7vXGH8-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="7M6_GuKzb6jUab7vXGH8-8" target="7M6_GuKzb6jUab7vXGH8-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7M6_GuKzb6jUab7vXGH8-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="7M6_GuKzb6jUab7vXGH8-8" target="7M6_GuKzb6jUab7vXGH8-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="7M6_GuKzb6jUab7vXGH8-8" value="HTTP" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="305" y="360" width="190" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7M6_GuKzb6jUab7vXGH8-14" value="Solicituds" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="490" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="7M6_GuKzb6jUab7vXGH8-15" value="Accés via Driver" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="540" width="120" height="40" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
