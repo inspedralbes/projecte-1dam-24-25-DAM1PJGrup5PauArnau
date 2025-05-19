@@ -31,4 +31,18 @@ router.post('/create', async (req, res) => {
     res.status(500).send('Error creant el tècnic');
   }
 });
+
+router.post('/:id/delete', async (req, res) => {
+  try {
+    const tecnic_id = await Tecnic.findByPk(req.params.id);
+    if (!tecnic_id) return res.status(404).send('Tecnic no trobat');
+
+    // Esborra el departament
+    await tecnic_id.destroy();
+    res.redirect('/tecnics');
+  } catch (error) {
+    res.status(500).send('Error al eliminar Tecnic: ' + error.message);
+  }
+});
+
 module.exports = router;
