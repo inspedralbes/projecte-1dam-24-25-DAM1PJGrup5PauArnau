@@ -52,6 +52,4 @@ Aquest projecte té com a objectiu principal el desenvolupament d'una aplicació
 
 Aquest sistema ofereix una base robusta i modular per a la gestió d’incidències dins d’una entitat educativa. Amb una arquitectura clara, una configuració senzilla i eines de manteniment i diagnòstic integrades, està pensat per facilitar tant el desenvolupament com l’administració a llarg termini.
 
-Aquest document serveix com a guia integral per qualsevol persona que hagi de desplegar, mantenir o ampliar el sistema.
-
-Vols una versió `.pdf` o `.docx` d’aquest document? Et puc ajudar a generar-la fàcilment!
+Aquest document serveix com a guia integral per qualsevol persona que hagi de desplegar, mantenir o ampliar el sistema
