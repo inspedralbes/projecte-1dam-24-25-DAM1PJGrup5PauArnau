@@ -80,7 +80,7 @@ app.get('/', async (req, res) => {
 
     const departaments = await Departament.findAll({ attributes: ['id', 'nom'] });
 
-    res.render('index', { incidencies, departaments });
+    res.render('index', { incidencies, departaments, createdId: req.query.createdId  });
   } catch (error) {
     console.error('Error carregant les incidències:', error.message);
     res.status(500).send('Error carregant les incidències');
