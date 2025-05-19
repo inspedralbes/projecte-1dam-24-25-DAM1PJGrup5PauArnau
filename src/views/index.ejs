@@ -32,17 +32,15 @@
     <div class="col-md-4">
       <input id="searchByDesc" type="text" class="form-control" placeholder="Cercar per descripció">
     </div>
-    <div class="col-md-4">
-      <select id="searchByDepartament" class="form-select">
-        <option value="">Tots els departaments</option>
-        <% const departamentsUnics = [...new Set(incidencies.map(i => i.Departament?.nom).filter(Boolean))]; %>
-        <% departamentsUnics.forEach(dep => { %>
-          <option value="<%= dep.toLowerCase() %>"><%= dep %></option>
-        <% }) %>
-      </select>
+      <div class="col-md-4">
+        <select id="searchByDepartament" class="form-select">
+          <option value="">-- Tots els departaments --</option>
+          <% departaments.forEach(dep => { %>
+            <option value="<%= dep.nom.toLowerCase() %>"><%= dep.nom %></option>
+          <% }) %>
+        </select>
+      </div>
     </div>
-  </div>
-
     <!-- Filtres -->
   <div class="row">
     <% if (incidencies && incidencies.length > 0) { %>
@@ -179,15 +177,12 @@ const express = require('express');
 const app = express();
 const connectDB = require('./db');
 
-connectDB(); // 👉 Connectem la base de dades
-
-// ... la resta del codi d'Express
+connectDB();
 
 app.listen(3000, () => {
   console.log('Servidor escoltant al port 3000');
 });
 
 </script>
-
 </body>
 </html>
