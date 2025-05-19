@@ -55,7 +55,6 @@ router.post('/:id/update', async (req, res) => {
   }
 });
 
-// Eliminar
 // Eliminar departament
 router.post('/:id/delete', async (req, res) => {
   try {
